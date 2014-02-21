@@ -1,6 +1,6 @@
 {% extends 'PMWorkspaceBundle:Workspace:layout.html.twig' %}
 {% block content %}
-    {% if usersRolesWorkspace|length > 0 %}
+    
         <form method="POST" name="test" {{ form_enctype(form) }} role="form">
             <table class="table table-hover table-responsive">
                 <thead>
@@ -26,17 +26,17 @@
                         </td>
                         {{ form_end(form) }}
                     </tr> 
-                    {% for urw in usersRolesWorkspace %}
-                        <tr>
-                            <td>{{ urw.user.username }}</td>
-                            <td>{{ urw.role.name}}</td>
-                            <td><a href="{{ path('pm_userroleworkspace_delete', {'workspace_id': urw.workspace.id, 'member_id': urw.user.id })}}" class="btn btn-danger btn-xs">Supprimer</a></td>
-                        </tr> 
-                    {% endfor %}
+                    {% if usersRolesWorkspace|length > 0 %}
+                        {% for urw in usersRolesWorkspace %}
+                            <tr>
+                                <td>{{ urw.user.username }}</td>
+                                <td>{{ urw.role.name}}</td>
+                                <td><a href="{{ path('pm_userroleworkspace_delete', {'workspace_id': urw.workspace.id, 'member_id': urw.user.id })}}" class="btn btn-danger btn-xs">Supprimer</a></td>
+                            </tr> 
+                        {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </form>
-    {% else %}
-        Il n'y a aucun membre affecté à ce workspace. 
-    {% endif %}
+    
 {% endblock %}
