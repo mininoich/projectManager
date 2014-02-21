@@ -1,0 +1,19 @@
+{% extends '::layout.html.twig' %}
+
+{% block title %}
+    Statuts
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ path('pm_status_index') }}">Liste des statuts</a></li>
+                     <li><a href="{{ path('pm_status_add') }}">Ajouter</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% block statusContent %}{% endblock %}
+{% endblock %}

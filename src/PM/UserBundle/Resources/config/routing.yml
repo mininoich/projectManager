@@ -1,0 +1,19 @@
+pm_user_add:
+    pattern:  /user/add
+    defaults: { _controller: PMUserBundle:Default:add }
+    
+pm_user_edit:
+    pattern:  /user/{id}
+    defaults: { _controller: PMUserBundle:Default:edit }
+    requirements:
+        id:: \d+
+        
+pm_user_delete:
+    pattern:  /user/delete/{id}
+    defaults: { _controller: PMUserBundle:Default:delete }
+    requirements:
+        id:: \d+
+        
+pm_user_index:
+    pattern:  /users
+    defaults: { _controller: PMUserBundle:Default:index }

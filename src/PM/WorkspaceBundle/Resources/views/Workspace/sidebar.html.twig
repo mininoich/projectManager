@@ -1,0 +1,4 @@
+{# empty Twig template #}
+{% for workspace in workspaces %}
+    <a href="{{ path('pm_workspace_show', {'id':  workspace.id }) }}" class="list-group-item"> - {{ workspace.name }}</a>
+{% endfor %}

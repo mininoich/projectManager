@@ -1,0 +1,30 @@
+{% extends 'PMWorkspaceBundle:Category:layout.html.twig' %}
+{% block title %}
+    Liste des catégories
+{% endblock %}
+
+{% block categoryContent %}
+    {% if categories|length > 0 %}
+        <table class="table table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in categories %}
+                    <tr>
+                        <td>{{ c.name }}</td>
+                        <td>
+                            <a href="{{ path('pm_category_edit', {'id': c.id})}}" class="btn btn-default btn-xs">Modifier</a>
+                            <a href="{{ path('pm_category_delete', {'id': c.id})}}" class="btn btn-danger btn-xs">Supprimer</a>
+                        </td>
+                    </tr> 
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning">Il n'y a aucune catégorie.</div> 
+    {% endif %}
+{% endblock %}

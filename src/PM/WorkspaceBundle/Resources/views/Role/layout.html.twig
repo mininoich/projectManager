@@ -1,0 +1,19 @@
+{% extends '::layout.html.twig' %}
+
+{% block title %}
+    Rôles
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ path('pm_role_index') }}">Liste des rôles</a></li>
+                     <li><a href="{{ path('pm_role_add') }}">Ajouter</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% block roleContent %}{% endblock %}
+{% endblock %}

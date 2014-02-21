@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>PM - {% block title %}{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('bundles/communs/css/bootstrap.min.css') }}" type="text/css" media="all" />
+            <link rel="stylesheet" href="{{ asset('bundles/communs/css/main.css') }}" type="text/css" media="all" />
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body style>
+        {% block body %}{% endblock %}
+        {% block javascripts %}
+            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/jquery-1.10.2.min.js') }}"></script>
+            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/bootstrap.min.js') }}"></script>
+            <script type="text/javascript" language="javascript" src="{{ asset('bundles/pmuser/js/user.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>

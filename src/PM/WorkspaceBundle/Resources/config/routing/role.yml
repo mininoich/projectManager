@@ -1,0 +1,25 @@
+pm_role_add:
+    pattern:  /add
+    defaults: { _controller: PMWorkspaceBundle:Role:add }
+    
+pm_role_edit:
+    pattern:  /edit/{id}
+    defaults: { _controller: PMWorkspaceBundle:Role:edit }
+    requirements:
+        id:: \d+
+        
+pm_role_delete:
+    pattern:  /delete/{id}
+    defaults: { _controller: PMWorkspaceBundle:Role:delete }
+    requirements:
+        id:: \d+
+    
+pm_role_show:
+    pattern: /{id}
+    defaults: { _controller: PMWorkspaceBundle:Role:show }
+    requirements:
+        id:: \d+
+    
+pm_role_index:
+    pattern:  /
+    defaults: { _controller: PMWorkspaceBundle:Role:index }

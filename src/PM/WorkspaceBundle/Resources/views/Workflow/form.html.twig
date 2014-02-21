@@ -1,0 +1,45 @@
+{% extends 'PMWorkspaceBundle:Role:layout.html.twig' %}
+
+{% block title %}
+    Edition du workflow
+{% endblock %}
+
+{% block roleContent %}
+    
+    <form method="POST" {{ form_enctype(form) }}>
+        <table class="table table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        De / Vers
+                    </th>
+                    {% for s in status %}
+                        <th>{{ s.name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for statusFrom in status %}
+                <tr>
+                    <td>
+                        <strong>{{ statusFrom.name }}</strong>
+                    </td>
+                {% for statusTo in status %}
+                    <td>
+                        {% if statusFrom.id == statusTo.id %}
+                            x
+                        {% else %}
+                            {{ form_widget(attribute(form, 'status_' ~ statusFrom.id ~ '_' ~ statusTo.id)) }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <p class="text-center">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </p>
+    {{ form_end(form) }}
+{% endblock %}

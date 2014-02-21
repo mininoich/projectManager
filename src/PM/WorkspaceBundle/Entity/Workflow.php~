@@ -1,0 +1,50 @@
+<?php
+
+namespace PM\WorkspaceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Workflow
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PM\WorkspaceBundle\Entity\WorkflowRepository")
+ */
+class Workflow
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Status", inversedBy="workflowsAsOld")
+     */
+    private $oldStatus;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Status", inversedBy="workflowsAsNew")
+     */
+    private $newStatus;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="workflows")
+     */
+    private $role;
+    
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}

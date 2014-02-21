@@ -1,0 +1,25 @@
+pm_status_add:
+    pattern:  /add
+    defaults: { _controller: PMWorkspaceBundle:Status:add }
+    
+pm_status_edit:
+    pattern:  /edit/{id}
+    defaults: { _controller: PMWorkspaceBundle:Status:edit }
+    requirements:
+        id: \d+
+        
+pm_status_delete:
+    pattern:  /delete/{id}
+    defaults: { _controller: PMWorkspaceBundle:Status:delete }
+    requirements:
+        id: \d+
+    
+pm_status_show:
+    pattern: /{id}
+    defaults: { _controller: PMWorkspaceBundle:Status:show }
+    requirements:
+        id: \d+
+    
+pm_status_index:
+    pattern:  /
+    defaults: { _controller: PMWorkspaceBundle:Status:index }

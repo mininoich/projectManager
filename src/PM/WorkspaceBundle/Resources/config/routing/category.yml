@@ -1,0 +1,25 @@
+pm_category_add:
+    pattern:  /add
+    defaults: { _controller: PMWorkspaceBundle:Category:add }
+    
+pm_category_edit:
+    pattern:  /edit/{id}
+    defaults: { _controller: PMWorkspaceBundle:Category:edit }
+    requirements:
+        id: \d+
+        
+pm_category_delete:
+    pattern:  /delete/{id}
+    defaults: { _controller: PMWorkspaceBundle:Category:delete }
+    requirements:
+        id: \d+
+    
+pm_category_show:
+    pattern: /{id}
+    defaults: { _controller: PMWorkspaceBundle:Category:show }
+    requirements:
+        id: \d+
+    
+pm_category_index:
+    pattern:  /
+    defaults: { _controller: PMWorkspaceBundle:Category:index }

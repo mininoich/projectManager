@@ -1,0 +1,31 @@
+{% extends 'PMWorkspaceBundle:Role:layout.html.twig' %}
+{% block title %}
+    Liste des rôles
+{% endblock %}
+
+{% block roleContent %}
+    {% if roles|length > 0 %}
+        <table class="table table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in roles %}
+                    <tr>
+                        <td>{{ role.name }}</td>
+                        <td>
+                            <a href="{{ path('pm_role_edit', {'id': role.id})}}" class="btn btn-default btn-xs">Modifier</a>
+                            <a href="{{ path('pm_workflow_edit', {'id': role.id})}}" class="btn btn-default btn-xs">Workflow</a>
+                            <a href="{{ path('pm_role_delete', {'id': role.id})}}" class="btn btn-danger btn-xs">Supprimer</a>
+                        </td>
+                    </tr> 
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning">Il n'y a aucun rôle.</div> 
+    {% endif %}
+{% endblock %}

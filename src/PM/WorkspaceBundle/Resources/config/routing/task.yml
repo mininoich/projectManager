@@ -1,0 +1,25 @@
+pm_task_add:
+    pattern:  /add
+    defaults: { _controller: PMWorkspaceBundle:Task:add }
+    
+pm_task_edit:
+    pattern:  /edit/{task_id}
+    defaults: { _controller: PMWorkspaceBundle:Task:edit }
+    requirements:
+        task_id: \d+
+        
+pm_task_delete:
+    pattern:  /delete/{task_id}
+    defaults: { _controller: PMWorkspaceBundle:Task:delete }
+    requirements:
+        task_id: \d+
+    
+pm_task_show:
+    pattern: /{task_id}
+    defaults: { _controller: PMWorkspaceBundle:Task:show }
+    requirements:
+        task_id: \d+
+    
+pm_task_index:
+    pattern:  /tasks
+    defaults: { _controller: PMWorkspaceBundle:Task:index }

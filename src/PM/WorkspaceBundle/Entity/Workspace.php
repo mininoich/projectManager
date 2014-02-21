@@ -1,0 +1,148 @@
+<?php
+
+namespace PM\WorkspaceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Workspace
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="PM\WorkspaceBundle\Entity\WorkspaceRepository")
+ */
+class Workspace
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="workspace")
+     */
+    private $tasks;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\UserRoleWorkspace", mappedBy="workspace")
+     */
+    private $userRoleWorkspace;
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Workspace
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userRoleWorkspace = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add tasks
+     *
+     * @param \PM\WorkspaceBundle\Entity\Task $tasks
+     * @return Workspace
+     */
+    public function addTask(\PM\WorkspaceBundle\Entity\Task $tasks)
+    {
+        $this->tasks[] = $tasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove tasks
+     *
+     * @param \PM\WorkspaceBundle\Entity\Task $tasks
+     */
+    public function removeTask(\PM\WorkspaceBundle\Entity\Task $tasks)
+    {
+        $this->tasks->removeElement($tasks);
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
+
+    /**
+     * Add userRoleWorkspace
+     *
+     * @param \PM\WorkspaceBundle\Entity\UserRoleWorkspace $userRoleWorkspace
+     * @return Workspace
+     */
+    public function addUserRoleWorkspace(\PM\WorkspaceBundle\Entity\UserRoleWorkspace $userRoleWorkspace)
+    {
+        $this->userRoleWorkspace[] = $userRoleWorkspace;
+
+        return $this;
+    }
+
+    /**
+     * Remove userRoleWorkspace
+     *
+     * @param \PM\WorkspaceBundle\Entity\UserRoleWorkspace $userRoleWorkspace
+     */
+    public function removeUserRoleWorkspace(\PM\WorkspaceBundle\Entity\UserRoleWorkspace $userRoleWorkspace)
+    {
+        $this->userRoleWorkspace->removeElement($userRoleWorkspace);
+    }
+
+    /**
+     * Get userRoleWorkspace
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserRoleWorkspace()
+    {
+        return $this->userRoleWorkspace;
+    }
+}

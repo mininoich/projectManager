@@ -1,0 +1,31 @@
+pm_workspace_workspace:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/workspace.yml"
+    prefix:   /workspaces
+    
+pm_workspace_role:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/role.yml"
+    prefix:   /roles
+    
+pm_workspace_status:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/status.yml"
+    prefix:   /status
+    
+pm_workspace_category:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/category.yml"
+    prefix:   /categories
+    
+pm_workspace_workflow:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/workflow.yml"
+    prefix:   /workflows
+    
+pm_userroleworkspace_role:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/userroleworkspace.yml"
+    prefix:   /workspaces/{workspace_id}
+    requirements:
+        workspace_id: \d+
+        
+pm_workspace_task:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/task.yml"
+    prefix:   /workspaces/{workspace_id}
+    requirements:
+        workspace_id: \d+

@@ -1,0 +1,13 @@
+pm_userroleworkspace_delete:
+    pattern:  /member/delete/{member_id}
+    defaults: { _controller: PMWorkspaceBundle:UserRoleWorkspace:delete }
+    requirements:
+        member_id: \d+
+        
+pm_userroleworkspace_add:
+    pattern:  /members/add
+    defaults: { _controller: PMWorkspaceBundle:UserRoleWorkspace:add }
+
+pm_userroleworkspace_index:
+    pattern:  /members
+    defaults: { _controller: PMWorkspaceBundle:UserRoleWorkspace:index }

@@ -1,0 +1,5 @@
+pm_workflow_edit:
+    pattern:  /edit/{id}
+    defaults: { _controller: PMWorkspaceBundle:Workflow:edit }
+    requirements:
+        id:: \d+
