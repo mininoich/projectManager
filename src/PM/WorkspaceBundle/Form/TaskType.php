@@ -3,6 +3,7 @@
 namespace PM\WorkspaceBundle\Form;
 
 use PM\UserBundle\Entity\UserRepository;
+use PM\WorkspaceBundle\Entity\Status;
 use PM\WorkspaceBundle\Entity\StatusRepository;
 use PM\WorkspaceBundle\Entity\Workspace;
 use Symfony\Component\Form\AbstractType;
@@ -12,10 +13,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class TaskType extends AbstractType
 {
     private $workspace;
+    private $status;
     
-    function __construct(Workspace $workspace){
+    function __construct(Workspace $workspace, Status $status){
         if(!is_null($workspace)){
             $this->workspace = $workspace;
+        }
+        if(!is_null($status)){
+            $this->status = $status;
         }
     }
       
@@ -26,6 +31,8 @@ class TaskType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $workspace = $this->workspace;
+        $status = $this->status;
+        
         $builder
             ->add('name')
             ->add('note')
@@ -40,8 +47,8 @@ class TaskType extends AbstractType
                 'multiple' => true,
                 'expanded' => true, 
                 'empty_value' => 'Choisissez...',
-                'by_reference' => true
-                , 'query_builder' => function(UserRepository $ur) use ($workspace) {
+                'by_reference' => true, 
+                'query_builder' => function(UserRepository $ur) use ($workspace) {
                         
                         return $ur->createQueryBuilder('u')
                             ->join('u.userRoleWorkspace', 'urw')
@@ -56,10 +63,12 @@ class TaskType extends AbstractType
                 'property' => 'name',
                 'required' => true,
                 'mapped' => true,
-                'empty_value' => 'Choisissez...'
-                , 'query_builder' => function(StatusRepository $sr) use ($workspace) {
+                'empty_value' => $status->getName(), 
+                'query_builder' => function(StatusRepository $sr) use ($status) {
                         
-                        return $sr->createQueryBuilder('s');
+                        return $sr->createQueryBuilder('s')
+                                ->innerJoin('s.workflowsAsNew', 'w', 'WITH', 'w.oldStatus = :status')
+                                ->setParameter('status', $status);
                       }
                     )
                 )

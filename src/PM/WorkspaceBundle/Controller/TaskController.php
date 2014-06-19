@@ -76,7 +76,7 @@ class TaskController extends Controller
     }
         
      private function form(Workspace $workspace, Task $task, $action){
-        $form = $this->createForm(new TaskType($workspace), $task);
+        $form = $this->createForm(new TaskType($workspace, $task->getCurrentStatus()), $task);
         
         
         $request = $this->getRequest();
