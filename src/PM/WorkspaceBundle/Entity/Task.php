@@ -60,7 +60,7 @@ class Task
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task")
+     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task", cascade={"persist"})
      */
     private $taskStatus;
     
@@ -259,7 +259,39 @@ class Task
     {
         return $this->taskStatus;
     }
-
+    
+    /**
+     * Get currentTaskStatus
+     *
+     * @return \PM\WorkspaceBundle\Entity\TaskStatus 
+     */
+    public function getCurrentTaskStatus()
+    {
+        return $this->taskStatus->last();
+    }
+    
+    /**
+     * Get currentStatus
+     *
+     * @return \PM\WorkspaceBundle\Entity\Status 
+     */
+    public function getCurrentStatus()
+    {
+        return $this->taskStatus->last()->getStatus();
+    }
+    
+    public function getStatus()
+    {
+        return $this->getCurrentStatus();
+    }
+    
+    public function setStatus(\PM\WorkspaceBundle\Entity\Status $status)
+    {
+        $taskStatus = new TaskStatus();
+        $taskStatus->setStatus($status);
+        return $this->addTaskStatus($taskStatus);
+    }
+    
     /**
      * Set workspace
      *

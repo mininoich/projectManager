@@ -38,6 +38,7 @@ class TaskType extends AbstractType
                 'property' => 'username',
                 'required' => false,
                 'multiple' => true,
+                'expanded' => true, 
                 'empty_value' => 'Choisissez...',
                 'by_reference' => true
                 , 'query_builder' => function(UserRepository $ur) use ($workspace) {
@@ -54,7 +55,7 @@ class TaskType extends AbstractType
                 'class' => 'PMWorkspaceBundle:Status',
                 'property' => 'name',
                 'required' => true,
-                'mapped' => false,
+                'mapped' => true,
                 'empty_value' => 'Choisissez...'
                 , 'query_builder' => function(StatusRepository $sr) use ($workspace) {
                         

@@ -1,0 +1,9 @@
+{% extends 'PMWorkspaceBundle:Workspace:layout.html.twig' %}
+
+{% block title %}
+    Workspace
+{% endblock %}
+
+{% block content %}
+    {{ render(controller('PMWorkspaceBundle:Task:todo',{'workspace': workspace, user: app.user})) }}
+{% endblock %}

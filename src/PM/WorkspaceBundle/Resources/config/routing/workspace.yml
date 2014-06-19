@@ -1,7 +1,13 @@
 pm_workspace_add:
     pattern:  /add
     defaults: { _controller: PMWorkspaceBundle:Workspace:add }
-    
+   
+pm_workspace_todo:
+    pattern: /{id}/todo
+    defaults: { _controller: PMWorkspaceBundle:Workspace:todo }
+    requirements:
+        id:: \d+
+        
 pm_workspace_show:
     pattern: /{id}
     defaults: { _controller: PMWorkspaceBundle:Workspace:show }

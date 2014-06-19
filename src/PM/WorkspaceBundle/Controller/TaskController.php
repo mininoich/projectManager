@@ -25,6 +25,24 @@ class TaskController extends Controller
     
     /**
     * @ParamConverter("workspace",     options={"mapping": {"workspace_id": "id"}})
+    */
+    public function todoAction(Workspace $workspace, User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $repository = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Task');
+        $query = $repository->createQueryBuilder('t')
+                ->where('t.workspace = :workspace')
+                ->innerJoin('t.users', 'u', 'WITH', 'u = :user')
+                ->setParameters(array('workspace' => $workspace, 'user' => $user))
+                ->getQuery();
+        $tasks = $query->getResult();
+        
+        return $this->render('PMWorkspaceBundle:Task:todo.html.twig', array('workspace' => $workspace, 'tasks' => $tasks));
+    }
+    
+    /**
+    * @ParamConverter("workspace",     options={"mapping": {"workspace_id": "id"}})
     * @ParamConverter("user",     options={"mapping": {"member_id": "id"}})
     */
     public function deleteAction(Workspace $workspace, User $user){
@@ -66,13 +84,13 @@ class TaskController extends Controller
             $form->bind($request);
             if($form->isValid()){
                 // Ajout du statut
-                $taskStatus = new TaskStatus();
-                $taskStatus->setStatus($form->get('status')->getData());
-                $task->addTaskStatus($taskStatus);
+                //$taskStatus = new TaskStatus();
+                //$taskStatus->setStatus($form->get('status')->getData());
+                //$task->addTaskStatus($taskStatus);
                 
                 $task->setWorkspace($workspace);
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($taskStatus);
+                //$em->persist($taskStatus);
                 $em->persist($task);
                 $em->flush();
                 
