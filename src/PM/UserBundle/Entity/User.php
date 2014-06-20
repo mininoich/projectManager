@@ -35,7 +35,13 @@ class User extends BaseUser {
      * @ORM\ManyToMany(targetEntity="PM\WorkspaceBundle\Entity\Task", mappedBy="users")
      */
     private $tasks;
-
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TaskStatus", mappedBy="user")
+     */
+    private $taskStatus;
+    
     /**
      * Get id
      *
