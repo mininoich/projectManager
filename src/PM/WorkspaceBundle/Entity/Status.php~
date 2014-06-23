@@ -24,10 +24,24 @@ class Status
     /**
      * @var string
      *
+     * @ORM\Column(name="action", type="string", length=255)
+     */
+    private $action;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="defaultValue", type="boolean")
+     */
+    private $defaultValue;
+    
     /**
      *
      * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task")
@@ -78,5 +92,159 @@ class Status
     public function getName()
     {
         return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->taskStatus = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->workflowsAsOld = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->workflowsAsNew = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add taskStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TaskStatus $taskStatus
+     * @return Status
+     */
+    public function addTaskStatus(\PM\WorkspaceBundle\Entity\TaskStatus $taskStatus)
+    {
+        $this->taskStatus[] = $taskStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove taskStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TaskStatus $taskStatus
+     */
+    public function removeTaskStatus(\PM\WorkspaceBundle\Entity\TaskStatus $taskStatus)
+    {
+        $this->taskStatus->removeElement($taskStatus);
+    }
+
+    /**
+     * Get taskStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTaskStatus()
+    {
+        return $this->taskStatus;
+    }
+
+    /**
+     * Add workflowsAsOld
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflowsAsOld
+     * @return Status
+     */
+    public function addWorkflowsAsOld(\PM\WorkspaceBundle\Entity\Workflow $workflowsAsOld)
+    {
+        $this->workflowsAsOld[] = $workflowsAsOld;
+
+        return $this;
+    }
+
+    /**
+     * Remove workflowsAsOld
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflowsAsOld
+     */
+    public function removeWorkflowsAsOld(\PM\WorkspaceBundle\Entity\Workflow $workflowsAsOld)
+    {
+        $this->workflowsAsOld->removeElement($workflowsAsOld);
+    }
+
+    /**
+     * Get workflowsAsOld
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkflowsAsOld()
+    {
+        return $this->workflowsAsOld;
+    }
+
+    /**
+     * Add workflowsAsNew
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflowsAsNew
+     * @return Status
+     */
+    public function addWorkflowsAsNew(\PM\WorkspaceBundle\Entity\Workflow $workflowsAsNew)
+    {
+        $this->workflowsAsNew[] = $workflowsAsNew;
+
+        return $this;
+    }
+
+    /**
+     * Remove workflowsAsNew
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflowsAsNew
+     */
+    public function removeWorkflowsAsNew(\PM\WorkspaceBundle\Entity\Workflow $workflowsAsNew)
+    {
+        $this->workflowsAsNew->removeElement($workflowsAsNew);
+    }
+
+    /**
+     * Get workflowsAsNew
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkflowsAsNew()
+    {
+        return $this->workflowsAsNew;
+    }
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     * @return Status
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string 
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Set default
+     *
+     * @param boolean $default
+     * @return Status
+     */
+    public function setDefault($default)
+    {
+        $this->default = $default;
+
+        return $this;
+    }
+
+    /**
+     * Get default
+     *
+     * @return boolean 
+     */
+    public function getDefault()
+    {
+        return $this->default;
     }
 }

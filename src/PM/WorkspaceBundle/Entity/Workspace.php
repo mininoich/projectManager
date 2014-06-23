@@ -40,6 +40,11 @@ class Workspace
     private $userRoleWorkspace;
     
     /**
+     * @ORM\OneToMany(targetEntity="Workflow", mappedBy="workspace")
+     */
+    private $workflows;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -144,5 +149,38 @@ class Workspace
     public function getUserRoleWorkspace()
     {
         return $this->userRoleWorkspace;
+    }
+
+    /**
+     * Add workflow
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflow
+     * @return Workspace
+     */
+    public function addWorkflow(\PM\WorkspaceBundle\Entity\Workflow $workflow)
+    {
+        $this->workflows[] = $workflow;
+
+        return $this;
+    }
+
+    /**
+     * Remove workflow
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflow
+     */
+    public function removeWorkflow(\PM\WorkspaceBundle\Entity\Workflow $workflow)
+    {
+        $this->workflows->removeElement($workflow);
+    }
+
+    /**
+     * Get workflow
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkflows()
+    {
+        return $this->workflows;
     }
 }

@@ -35,10 +35,9 @@ class Role
     private $userRoleWorkspace;
     
     /**
-     *
-     * @ORM\OneToMany(targetEntity="Workflow", mappedBy="role")
+     * @ORM\OneToMany(targetEntity="WorkflowsRoles", mappedBy="role")
      */
-    private $workflows;
+    private $workflowsRoles;
 
 
     /**
@@ -146,5 +145,38 @@ class Role
     public function getWorkflows()
     {
         return $this->workflows;
+    }
+
+    /**
+     * Add workflowsRoles
+     *
+     * @param \PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles
+     * @return Role
+     */
+    public function addWorkflowsRole(\PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles)
+    {
+        $this->workflowsRoles[] = $workflowsRoles;
+
+        return $this;
+    }
+
+    /**
+     * Remove workflowsRoles
+     *
+     * @param \PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles
+     */
+    public function removeWorkflowsRole(\PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles)
+    {
+        $this->workflowsRoles->removeElement($workflowsRoles);
+    }
+
+    /**
+     * Get workflowsRoles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkflowsRoles()
+    {
+        return $this->workflowsRoles;
     }
 }

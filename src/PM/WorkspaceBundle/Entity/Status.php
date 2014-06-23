@@ -24,10 +24,24 @@ class Status
     /**
      * @var string
      *
+     * @ORM\Column(name="action", type="string", length=255)
+     */
+    private $action;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="defaultValue", type="boolean", nullable=true)
+     */
+    private $defaultValue;
+    
     /**
      *
      * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task")
@@ -186,5 +200,51 @@ class Status
     public function getWorkflowsAsNew()
     {
         return $this->workflowsAsNew;
+    }
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     * @return Status
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string 
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    /**
+     * Set defaultValue
+     *
+     * @param boolean $defaultValue
+     * @return Status
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultValue
+     *
+     * @return boolean 
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
     }
 }

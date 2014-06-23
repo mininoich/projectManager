@@ -12,3 +12,9 @@ body { padding-top: 70px; }
 
 a.link-add-workspace {background-color:#E2F1DB; }
 a.link-add-workspace:hover {background-color:#D6E9D0; }
+
+/* Workflow */
+ul.ul_workflow{list-style-type: none; }
+ul.ul_workflow li{font-weight: normal; font-size: 0.8em; line-height:none ; color:#666666;}
+.th_workflow_to{ text-align:center;}
+.td_workflow_from{text-align:right;}

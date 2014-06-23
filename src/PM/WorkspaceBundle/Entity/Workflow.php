@@ -33,10 +33,14 @@ class Workflow
     private $newStatus;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Role", inversedBy="workflows")
+     * @ORM\OneToMany(targetEntity="WorkflowsRoles", mappedBy="workflow")
      */
-    private $role;
+    private $workflowsRoles;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Workspace", inversedBy="workflows")
+     */
+    private $workspace;
     
     /**
      * Get id
@@ -100,12 +104,12 @@ class Workflow
      * @param \PM\WorkspaceBundle\Entity\Role $role
      * @return Workflow
      */
-    public function setRole(\PM\WorkspaceBundle\Entity\Role $role = null)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
+//    public function setRole(\PM\WorkspaceBundle\Entity\Role $role = null)
+//    {
+//        $this->role = $role;
+//
+//        return $this;
+//    }
 
     /**
      * Get role
@@ -115,5 +119,45 @@ class Workflow
     public function getRole()
     {
         return $this->role;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->workflowsRoles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add workflowsRoles
+     *
+     * @param \PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles
+     * @return Workflow
+     */
+    public function addWorkflowsRole(\PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles)
+    {
+        $this->workflowsRoles[] = $workflowsRoles;
+
+        return $this;
+    }
+
+    /**
+     * Remove workflowsRoles
+     *
+     * @param \PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles
+     */
+    public function removeWorkflowsRole(\PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles)
+    {
+        $this->workflowsRoles->removeElement($workflowsRoles);
+    }
+
+    /**
+     * Get workflowsRoles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkflowsRoles()
+    {
+        return $this->workflowsRoles;
     }
 }
