@@ -43,8 +43,16 @@ class Status
     private $defaultValue;
     
     /**
+     * @var boolean
      *
-     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task")
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+    
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="status")
      */
     private $taskStatus;
     
@@ -101,6 +109,7 @@ class Status
         $this->taskStatus = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workflowsAsOld = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workflowsAsNew = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->deleted = false;
     }
 
     /**
@@ -246,5 +255,28 @@ class Status
     public function getDefaultValue()
     {
         return $this->defaultValue;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return Status
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean 
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
     }
 }

@@ -8,14 +8,16 @@
         <table class="table table-hover table-responsive">
             <thead>
                 <tr>
-                    <th>Nom</th>
+                    <th>Action</th>
+                    <th>Statut associé</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for s in status %}
                     <tr>
-                        <td>{{ s.name }}</td>
+                        <td>{{ s.action }}</td>
+                        <td>{{ s.name }} {% if s.defaultValue %}<em>(Par défaut)</em>{% endif %}</td>
                         <td>
                             <a href="{{ path('pm_status_edit', {'id': s.id})}}" class="btn btn-default btn-xs">Modifier</a>
                             <a href="{{ path('pm_status_delete', {'id': s.id})}}" class="btn btn-danger btn-xs">Supprimer</a>

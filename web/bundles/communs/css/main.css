@@ -14,7 +14,6 @@ a.link-add-workspace {background-color:#E2F1DB; }
 a.link-add-workspace:hover {background-color:#D6E9D0; }
 
 /* Workflow */
-ul.ul_workflow{list-style-type: none; }
-ul.ul_workflow li{font-weight: normal; font-size: 0.8em; line-height:none ; color:#666666;}
-.th_workflow_to{ text-align:center;}
-.td_workflow_from{text-align:right;}
+td.td_workflow_body{font-weight: normal; font-size: 0.7em; line-height:none ; color:#666666;}
+.th_workflow_to{ text-align:center; font-size:0.8em;}
+.td_workflow_from{text-align:right; font-size:0.8em;}

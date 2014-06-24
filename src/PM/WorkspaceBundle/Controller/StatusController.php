@@ -10,7 +10,7 @@ class StatusController extends Controller
 {
     public function indexAction()
     {
-        $status = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status')->findAll();
+        $status = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status')->findBy(array('deleted' => false));
         return $this->render('PMWorkspaceBundle:Status:index.html.twig', array('status' => $status));
     }
     
@@ -32,6 +32,16 @@ class StatusController extends Controller
             $form->bind($request);
             if($form->isValid()){
                 $em = $this->getDoctrine()->getManager();
+                
+                if($form->get('defaultValue')->getData() == true){
+                    // Update des autres statuts à false pour defaultValue
+                    $defaultStatus = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status')->findBy(array('defaultValue' => true));
+                    foreach($defaultStatus as $ds){
+                        $ds->setDefaultValue(false);
+                        $em->persist($ds);
+                    }
+                }
+                
                 $em->persist($status);
                 $em->flush();
                 
@@ -44,19 +54,25 @@ class StatusController extends Controller
     }
     
     public function deleteAction(Status $status){
-        // On vérifie si le rôle n'est pas déjà utilisé pour au moins un projet
-        $affectations = $status->getTaskStatus();
-        $num = count($affectations);
-        
-        if($num > 0){
-            $this->get('session')->getFlashBag()->add('danger', 'Impossible de supprimer ce statut car il est utilisé');
+        // On ne peut pas supprimer un statut par défaut
+        if($status->getDefaultValue() == true){
+            $this->get('session')->getFlashBag()->add('danger', 'Impossible de supprimer un statut par défaut. Veuillez en choisir un autre puis supprimer ce statut.');
         } else {
+            // On vérifie si le rôle n'est pas déjà utilisé pour au moins un projet
+            $affectations = $status->getTaskStatus();
+            $num = count($affectations);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($status);
+
+            if($num > 0){
+                $status->setDeleted(true);
+                $em->persist($status);
+            } else {
+                $em->remove($status);
+            }
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'Statut supprimé avec succès');
         }
-        
         return $this->redirect($this->generateUrl('pm_status_index'));
     }
 }

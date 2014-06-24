@@ -38,13 +38,21 @@ class Status
     /**
      * @var boolean
      *
-     * @ORM\Column(name="defaultValue", type="boolean")
+     * @ORM\Column(name="defaultValue", type="boolean", nullable=true)
      */
     private $defaultValue;
     
     /**
+     * @var boolean
      *
-     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task")
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+    
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="status")
      */
     private $taskStatus;
     
@@ -226,25 +234,25 @@ class Status
     }
 
     /**
-     * Set default
+     * Set defaultValue
      *
-     * @param boolean $default
+     * @param boolean $defaultValue
      * @return Status
      */
-    public function setDefault($default)
+    public function setDefaultValue($defaultValue)
     {
-        $this->default = $default;
+        $this->defaultValue = $defaultValue;
 
         return $this;
     }
 
     /**
-     * Get default
+     * Get defaultValue
      *
      * @return boolean 
      */
-    public function getDefault()
+    public function getDefaultValue()
     {
-        return $this->default;
+        return $this->defaultValue;
     }
 }

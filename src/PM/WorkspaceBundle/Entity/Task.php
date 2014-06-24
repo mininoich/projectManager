@@ -277,6 +277,9 @@ class Task
      */
     public function getCurrentStatus()
     {
+        if(count($this->taskStatus) == 0) {
+            return null;
+        }
         return $this->taskStatus->last()->getStatus();
     }
     

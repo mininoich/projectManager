@@ -9,7 +9,7 @@
                         De / Vers
                     </th>
                     {% for s in status %}
-                        <th class="th_workflow_to">{{ s.name }}</th>
+                    <th class="th_workflow_to">{{ s.action }}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -21,17 +21,11 @@
                         <strong>{{ statusFrom.name }}</strong>
                     </td>
                 {% for statusTo in status %}
-                    <td>
-                        {% if statusFrom.id == statusTo.id %}
-                            
-                        {% else %}
+                    <td class="td_workflow_body" title="Cocher les profils qui peuvent cliquer sur '{{ statusTo.action }}' lorsque le statut est égal à '{{ statusFrom.name }}'">
+                        {% if statusFrom.id != statusTo.id %}
                             {% for role in roles %}
-                            <ul class="ul_workflow">
-                                <li>
-                                    {{ form_widget(attribute(form, 'status_' ~ statusFrom.id ~ '_' ~ statusTo.id ~ '_' ~ role.id )) }} 
-                                    {{ form_label(attribute(form, 'status_' ~ statusFrom.id ~ '_' ~ statusTo.id ~ '_' ~ role.id )) }}
-                                </li>
-                            </ul>
+                                {{ form_widget(attribute(form, 'status_' ~ statusFrom.id ~ '_' ~ statusTo.id ~ '_' ~ role.id )) }}&nbsp;{{ form_label(attribute(form, 'status_' ~ statusFrom.id ~ '_' ~ statusTo.id ~ '_' ~ role.id )) }}
+                                <br/>
                             {% endfor %}
                         {% endif %}
                     </td>

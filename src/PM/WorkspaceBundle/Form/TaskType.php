@@ -2,6 +2,7 @@
 
 namespace PM\WorkspaceBundle\Form;
 
+use PM\UserBundle\Entity\User;
 use PM\UserBundle\Entity\UserRepository;
 use PM\WorkspaceBundle\Entity\Status;
 use PM\WorkspaceBundle\Entity\StatusRepository;
@@ -14,13 +15,17 @@ class TaskType extends AbstractType
 {
     private $workspace;
     private $status;
+    private $user;
     
-    function __construct(Workspace $workspace, Status $status){
+    function __construct(Workspace $workspace, Status $status, User $user){
         if(!is_null($workspace)){
             $this->workspace = $workspace;
         }
         if(!is_null($status)){
             $this->status = $status;
+        }
+        if(!is_null($user)){
+            $this->user = $user;
         }
     }
       
@@ -32,6 +37,7 @@ class TaskType extends AbstractType
     {
         $workspace = $this->workspace;
         $status = $this->status;
+        $user = $this->user;
         
         $builder
             ->add('name')
@@ -64,11 +70,15 @@ class TaskType extends AbstractType
                 'required' => true,
                 'mapped' => true,
                 'empty_value' => $status->getName(), 
-                'query_builder' => function(StatusRepository $sr) use ($status) {
+                'query_builder' => function(StatusRepository $sr) use ($status, $user, $workspace) {
                         
                         return $sr->createQueryBuilder('s')
                                 ->innerJoin('s.workflowsAsNew', 'w', 'WITH', 'w.oldStatus = :status')
-                                ->setParameter('status', $status);
+                                ->innerJoin('w.role', 'r')
+                                ->innerJoin('r.userRoleWorkspace', 'urw')
+                                ->where('urw.user = :current_user')
+                                ->andWhere('w.workspace = :workspace')
+                                ->setParameters(array('status' => $status, 'current_user' => $user, 'workspace' => $workspace));
                       }
                     )
                 )

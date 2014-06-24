@@ -76,7 +76,20 @@ class TaskController extends Controller
     }
         
      private function form(Workspace $workspace, Task $task, $action){
-        $form = $this->createForm(new TaskType($workspace, $task->getCurrentStatus()), $task);
+        $user = $this->get('security.context')->getToken()->getUser();
+        $repo = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status');
+        $initialStatus = $repo->createQueryBuilder('s')
+                            ->where('s.defaultValue = 1')
+                            ->getQuery()
+                            ->getSingleResult();
+        
+        if($action == 'add'){
+            $status = $initialStatus;
+        } else {
+            $status = $task->getCurrentStatus();
+        }
+        
+        $form = $this->createForm(new TaskType($workspace, $status, $user), $task);
         
         
         $request = $this->getRequest();

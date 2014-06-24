@@ -32,10 +32,12 @@ class Workflow
      */
     private $newStatus;
     
+    
+    
     /**
-     * @ORM\OneToMany(targetEntity="WorkflowsRoles", mappedBy="workflow")
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="workflows")
      */
-    private $workflowsRoles;
+    private $role;
     
     /**
      * @ORM\ManyToOne(targetEntity="Workspace", inversedBy="workflows")
@@ -99,19 +101,6 @@ class Workflow
     }
 
     /**
-     * Set role
-     *
-     * @param \PM\WorkspaceBundle\Entity\Role $role
-     * @return Workflow
-     */
-//    public function setRole(\PM\WorkspaceBundle\Entity\Role $role = null)
-//    {
-//        $this->role = $role;
-//
-//        return $this;
-//    }
-
-    /**
      * Get role
      *
      * @return \PM\WorkspaceBundle\Entity\Role 
@@ -129,35 +118,38 @@ class Workflow
     }
 
     /**
-     * Add workflowsRoles
+     * Set role
      *
-     * @param \PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles
+     * @param \PM\WorkspaceBundle\Entity\Role $role
      * @return Workflow
      */
-    public function addWorkflowsRole(\PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles)
+    public function setRole(\PM\WorkspaceBundle\Entity\Role $role = null)
     {
-        $this->workflowsRoles[] = $workflowsRoles;
+        $this->role = $role;
 
         return $this;
     }
 
     /**
-     * Remove workflowsRoles
+     * Set workspace
      *
-     * @param \PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles
+     * @param \PM\WorkspaceBundle\Entity\Workspace $workspace
+     * @return Workflow
      */
-    public function removeWorkflowsRole(\PM\WorkspaceBundle\Entity\WorkflowsRoles $workflowsRoles)
+    public function setWorkspace(\PM\WorkspaceBundle\Entity\Workspace $workspace = null)
     {
-        $this->workflowsRoles->removeElement($workflowsRoles);
+        $this->workspace = $workspace;
+
+        return $this;
     }
 
     /**
-     * Get workflowsRoles
+     * Get workspace
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \PM\WorkspaceBundle\Entity\Workspace 
      */
-    public function getWorkflowsRoles()
+    public function getWorkspace()
     {
-        return $this->workflowsRoles;
+        return $this->workspace;
     }
 }

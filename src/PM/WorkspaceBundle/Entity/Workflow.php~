@@ -32,11 +32,17 @@ class Workflow
      */
     private $newStatus;
     
-    /**
-     * @ORM\OneToMany(targetEntity="WorkflowsRoles", mappedBy="workflow")
-     */
-    private $workflowsRoles;
     
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="workflows")
+     */
+    private $role;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Workspace", inversedBy="workflows")
+     */
+    private $workspace;
     
     /**
      * Get id
@@ -115,5 +121,12 @@ class Workflow
     public function getRole()
     {
         return $this->role;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->workflowsRoles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 }
