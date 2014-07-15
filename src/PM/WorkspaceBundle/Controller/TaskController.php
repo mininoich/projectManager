@@ -20,7 +20,12 @@ class TaskController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tasks = $workspace->getTasks();
         
-        return $this->render('PMWorkspaceBundle:Task:index.html.twig', array('workspace' => $workspace, 'tasks' => $tasks));
+        // Statut par défaut pour afficher le bouton
+        $em = $this->getDoctrine()->getManager();
+        
+        $status = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status')->findBy(array('defaultValue' => true));
+        
+        return $this->render('PMWorkspaceBundle:Task:index.html.twig', array('workspace' => $workspace, 'tasks' => $tasks, 'status' => $status));
     }
     
     /**
