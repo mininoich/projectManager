@@ -24,23 +24,9 @@ class Status
     /**
      * @var string
      *
-     * @ORM\Column(name="action", type="string", length=255)
-     */
-    private $action;
-    
-    /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-    
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="defaultValue", type="boolean", nullable=true)
-     */
-    private $defaultValue;
     
     /**
      * @var boolean

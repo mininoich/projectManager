@@ -2,7 +2,6 @@
         <table class="table table-hover table-responsive table-condensed">
             <thead>
                 <tr>
-                    <th>Etat</th>
                     <th>Statut</th>
                     <th>Sujet</th>
                     <th>Action</th>
@@ -11,10 +10,6 @@
             <tbody>
                 {% for t in tasks %}
                     <tr>
-                        <td>
-                            <img src=" {{ asset('img/spinner-3.png') }} ">
-                            <a href="#" data-toggle="tooltip" data-placement="left" title="Travailler dessus"><img src=" {{ asset('img/play.png') }} "></a>
-                        </td>
                         <td>{{ t.currentTaskStatus.status.name }} </td>
                         <td>{{ t.name }}</td>
                         <td>
@@ -28,3 +23,38 @@
     {% else %}
         <div class="alert alert-warning">Vous n'avez aucune tâche affectée.</div> 
     {% endif %}
+        
+        
+  <div class="panel panel-default col-md-6">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
+  <div class="panel-body">
+    <p>...</p>
+  </div>
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Cras justo odio</li>
+    <li class="list-group-item">Dapibus ac facilisis in</li>
+    <li class="list-group-item">Morbi leo risus</li>
+    <li class="list-group-item">Porta ac consectetur ac</li>
+    <li class="list-group-item">Vestibulum at eros</li>
+  </ul>
+</div>
+        
+        <div class="panel panel-default col-md-5 col-md-offset-1">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
+  <div class="panel-body">
+    <p>...</p>
+  </div>
+
+  <!-- List group -->
+  <ul class="list-group">
+    <li class="list-group-item">Cras justo odio</li>
+    <li class="list-group-item">Dapibus ac facilisis in</li>
+    <li class="list-group-item">Morbi leo risus</li>
+    <li class="list-group-item">Porta ac consectetur ac</li>
+    <li class="list-group-item">Vestibulum at eros</li>
+  </ul>
+</div>

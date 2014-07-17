@@ -4,6 +4,7 @@ namespace PM\WorkspaceBundle\Controller;
 
 use PM\WorkspaceBundle\Form\StatusType;
 use PM\WorkspaceBundle\Entity\Status;
+use PM\WorkspaceBundle\Entity\Workflow;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class StatusController extends Controller
@@ -33,15 +34,6 @@ class StatusController extends Controller
             if($form->isValid()){
                 $em = $this->getDoctrine()->getManager();
                 
-                if($form->get('defaultValue')->getData() == true){
-                    // Update des autres statuts à false pour defaultValue
-                    $defaultStatus = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status')->findBy(array('defaultValue' => true));
-                    foreach($defaultStatus as $ds){
-                        $ds->setDefaultValue(false);
-                        $em->persist($ds);
-                    }
-                }
-                
                 $em->persist($status);
                 $em->flush();
                 
@@ -54,25 +46,29 @@ class StatusController extends Controller
     }
     
     public function deleteAction(Status $status){
-        // On ne peut pas supprimer un statut par défaut
-        if($status->getDefaultValue() == true){
-            $this->get('session')->getFlashBag()->add('danger', 'Impossible de supprimer un statut par défaut. Veuillez en choisir un autre puis supprimer ce statut.');
-        } else {
-            // On vérifie si le rôle n'est pas déjà utilisé pour au moins un projet
-            $affectations = $status->getTaskStatus();
-            $num = count($affectations);
+        // On vérifie si le rôle n'est pas déjà utilisé pour au moins un projet
+        $affectations = $status->getTaskStatus();
+        $num = count($affectations);
 
-            $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-            if($num > 0){
-                $status->setDeleted(true);
-                $em->persist($status);
-            } else {
-                $em->remove($status);
-            }
-            $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Statut supprimé avec succès');
+        // Suppression des workflows
+        foreach($status->getWorkflowsAsNew() as $w){
+            $em->remove($w);
         }
+        foreach($status->getWorkflowsAsOld() as $w){
+            $em->remove($w);
+        }
+            
+        if($num > 0){
+            $status->setDeleted(true);
+            $em->persist($status);
+        } else {
+            $em->remove($status);
+        }
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success', 'Statut supprimé avec succès');
+        
         return $this->redirect($this->generateUrl('pm_status_index'));
     }
 }
