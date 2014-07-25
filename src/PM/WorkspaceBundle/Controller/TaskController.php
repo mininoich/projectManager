@@ -30,15 +30,25 @@ class TaskController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        $repository = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Task');
-        $query = $repository->createQueryBuilder('t')
-                ->where('t.workspace = :workspace')
-                ->innerJoin('t.users', 'u', 'WITH', 'u = :user')
+//        $repository = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Task');
+//        $query = $repository->createQueryBuilder('t')
+//                ->where('t.workspace = :workspace')
+//                ->innerJoin('t.users', 'u', 'WITH', 'u = :user')
+//                ->setParameters(array('workspace' => $workspace, 'user' => $user))
+//                ->getQuery();
+//        $tasks = $query->getResult();
+        
+        $repository = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status');
+        $query = $repository->createQueryBuilder('s')
+                ->where('s.deleted = 0')
+                ->leftJoin('s.taskStatus', 'ts', 'WITH', 'ts.lastStatus = 1')
+                ->leftJoin('ts.task', 't', 'WITH', 't.workspace = :workspace')
+                ->leftJoin('t.users', 'u', 'WITH', 'u = :user')
                 ->setParameters(array('workspace' => $workspace, 'user' => $user))
                 ->getQuery();
-        $tasks = $query->getResult();
+        $status = $query->getResult();
         
-        return $this->render('PMWorkspaceBundle:Task:todo.html.twig', array('workspace' => $workspace, 'tasks' => $tasks));
+        return $this->render('PMWorkspaceBundle:Task:todo.html.twig', array('workspace' => $workspace, 'status' => $status));
     }
     
     /**
@@ -89,20 +99,32 @@ class TaskController extends Controller
             $status = $task->getCurrentStatus();
         }
         
-        $form = $this->createForm(new TaskType($workspace, $status, $user), $task);
+        $form = $this->createForm(new TaskType($workspace, $status, $user, $action), $task);
         
         
         $request = $this->getRequest();
         if($request->getMethod() === "POST"){
             $form->bind($request);
             if($form->isValid()){
-                // Ajout du statut
-                //$taskStatus = new TaskStatus();
-                //$taskStatus->setStatus($form->get('status')->getData());
-                //$task->addTaskStatus($taskStatus);
+                $em = $this->getDoctrine()->getManager();
+                
+                if($action == 'add'){
+                    // Ajout du statut
+                    $taskStatus = new TaskStatus();
+                    $taskStatus->setStatus($initialStatus);
+                    $task->addTaskStatus($taskStatus);
+                }
+                
+                
+                if($action != 'add'){
+                    // On met l'ancien status à LastStatus = false
+                    $ts = $this->getDoctrine()->getRepository('PMWorkspaceBundle:TaskStatus')->findOneBy(array('task' => $task, 'lastStatus' => 1));
+                    $ts->setLastStatus(false);
+                    $em->persist($ts);
+                }
                 
                 $task->setWorkspace($workspace);
-                $em = $this->getDoctrine()->getManager();
+                
                 //$em->persist($taskStatus);
                 $em->persist($task);
                 $em->flush();

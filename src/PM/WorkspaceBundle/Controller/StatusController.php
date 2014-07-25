@@ -29,11 +29,32 @@ class StatusController extends Controller
         
         
         $request = $this->getRequest();
+        
         if($request->getMethod() === "POST"){
             $form->bind($request);
             if($form->isValid()){
                 $em = $this->getDoctrine()->getManager();
                 
+                $idStatutCourant = ($action == 'add' ? null : $status->getId());
+                
+                // On vérifie si un autre statut par défaut existe
+                $otherDefaultStatus = $this->getDoctrine()->getManager()->getRepository('PMWorkspaceBundle:Status')->findDefaultStatus($idStatutCourant);
+                $numOfOtherDefaultStatus = count($otherDefaultStatus);
+                
+                if($numOfOtherDefaultStatus > 0){
+                    if($form->get('defaultValue')->getData() == true){
+                        // defaultValue à false pour l'ancien par défaut
+                        $otherDefaultStatus[0]->setDefaultValue(false);
+                        $em->persist($otherDefaultStatus[0]);
+                        // default value à true pour le statut courant
+                        $status->setDefaultValue(true);
+                    }
+                } else {
+                    // On est obligé d'avoir un statut par défaut donc on met defaultValue à true pour le courant
+                    $status->setDefaultValue(true);
+                }
+                
+               
                 $em->persist($status);
                 $em->flush();
                 

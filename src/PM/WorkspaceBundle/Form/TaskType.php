@@ -16,8 +16,9 @@ class TaskType extends AbstractType
     private $workspace;
     private $status;
     private $user;
+    private $action;
     
-    function __construct(Workspace $workspace, Status $status, User $user){
+    function __construct(Workspace $workspace, Status $status, User $user, $action){
         if(!is_null($workspace)){
             $this->workspace = $workspace;
         }
@@ -26,6 +27,9 @@ class TaskType extends AbstractType
         }
         if(!is_null($user)){
             $this->user = $user;
+        }
+        if(!is_null($action)){
+            $this->action = $action;
         }
     }
       
@@ -41,8 +45,12 @@ class TaskType extends AbstractType
         
         $builder
             ->add('name')
-            ->add('note')
-            ->add('estimatedTime')
+            ->add('note', 'textarea', array(
+                'required' => false
+            ))
+            ->add('estimatedTime', 'number', array(
+                'required' => false
+            ))
             ->add('deadline')
             ->add('category')
             ->add('users')
@@ -63,8 +71,9 @@ class TaskType extends AbstractType
                             ->setParameter('workspace', $workspace);
                       }
                     )
-                )
-            ->add('status', 'entity', array(
+                );
+        if($this->action == 'edit'){
+            $builder->add('status', 'entity', array(
                 'class' => 'PMWorkspaceBundle:Status',
                 'property' => 'name',
                 'required' => true,
@@ -81,8 +90,8 @@ class TaskType extends AbstractType
                                 ->setParameters(array('status' => $status, 'current_user' => $user, 'workspace' => $workspace));
                       }
                     )
-                )
-        ;
+                );
+        }
     }
     
     /**

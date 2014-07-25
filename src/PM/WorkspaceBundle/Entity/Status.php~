@@ -24,23 +24,9 @@ class Status
     /**
      * @var string
      *
-     * @ORM\Column(name="action", type="string", length=255)
-     */
-    private $action;
-    
-    /**
-     * @var string
-     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-    
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="defaultValue", type="boolean", nullable=true)
-     */
-    private $defaultValue;
     
     /**
      * @var boolean
@@ -49,6 +35,12 @@ class Status
      */
     private $deleted;
     
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="defaultValue", type="boolean")
+     */
+    private $defaultValue;
     
     /**
      *
@@ -109,6 +101,7 @@ class Status
         $this->taskStatus = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workflowsAsOld = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workflowsAsNew = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->deleted = false;
     }
 
     /**
@@ -211,48 +204,25 @@ class Status
     }
 
     /**
-     * Set action
+     * Set deleted
      *
-     * @param string $action
+     * @param boolean $deleted
      * @return Status
      */
-    public function setAction($action)
+    public function setDeleted($deleted)
     {
-        $this->action = $action;
+        $this->deleted = $deleted;
 
         return $this;
     }
 
     /**
-     * Get action
-     *
-     * @return string 
-     */
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    /**
-     * Set defaultValue
-     *
-     * @param boolean $defaultValue
-     * @return Status
-     */
-    public function setDefaultValue($defaultValue)
-    {
-        $this->defaultValue = $defaultValue;
-
-        return $this;
-    }
-
-    /**
-     * Get defaultValue
+     * Get deleted
      *
      * @return boolean 
      */
-    public function getDefaultValue()
+    public function getDeleted()
     {
-        return $this->defaultValue;
+        return $this->deleted;
     }
 }

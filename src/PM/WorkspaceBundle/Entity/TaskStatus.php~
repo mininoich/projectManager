@@ -27,6 +27,13 @@ class TaskStatus
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+     * @var \boolean
+     *
+     * @ORM\Column(name="lastStatus", type="boolean")
+     */
+    private $lastStatus;
 
     /**
      *
@@ -135,7 +142,7 @@ class TaskStatus
      * @param \PM\WorkspaceBundle\Entity\User $user
      * @return TaskStatus
      */
-    public function setUser(\PM\WorkspaceBundle\Entity\User $user = null)
+    public function setUser(\PM\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
@@ -145,7 +152,7 @@ class TaskStatus
     /**
      * Get user
      *
-     * @return \PM\WorkspaceBundle\Entity\User 
+     * @return \PM\UserBundle\Entity\User 
      */
     public function getUser()
     {

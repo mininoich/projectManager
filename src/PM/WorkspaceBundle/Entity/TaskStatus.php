@@ -27,6 +27,13 @@ class TaskStatus
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+     * @var \boolean
+     *
+     * @ORM\Column(name="lastStatus", type="boolean")
+     */
+    private $lastStatus;
 
     /**
      *
@@ -49,6 +56,7 @@ class TaskStatus
 
     public function __construct() {
         $this->date = new \Datetime();
+        $this->lastStatus = true;
     }
     /**
      * Get id
@@ -150,5 +158,28 @@ class TaskStatus
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set lastStatus
+     *
+     * @param boolean $lastStatus
+     * @return TaskStatus
+     */
+    public function setLastStatus($lastStatus)
+    {
+        $this->lastStatus = $lastStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get lastStatus
+     *
+     * @return boolean 
+     */
+    public function getLastStatus()
+    {
+        return $this->lastStatus;
     }
 }

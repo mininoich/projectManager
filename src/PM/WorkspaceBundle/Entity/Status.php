@@ -35,6 +35,12 @@ class Status
      */
     private $deleted;
     
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="defaultValue", type="boolean")
+     */
+    private $defaultValue = false;
     
     /**
      *
@@ -198,26 +204,26 @@ class Status
     }
 
     /**
-     * Set action
+     * Set deleted
      *
-     * @param string $action
+     * @param boolean $deleted
      * @return Status
      */
-    public function setAction($action)
+    public function setDeleted($deleted)
     {
-        $this->action = $action;
+        $this->deleted = $deleted;
 
         return $this;
     }
 
     /**
-     * Get action
+     * Get deleted
      *
-     * @return string 
+     * @return boolean 
      */
-    public function getAction()
+    public function getDeleted()
     {
-        return $this->action;
+        return $this->deleted;
     }
 
     /**
@@ -241,28 +247,5 @@ class Status
     public function getDefaultValue()
     {
         return $this->defaultValue;
-    }
-
-    /**
-     * Set deleted
-     *
-     * @param boolean $deleted
-     * @return Status
-     */
-    public function setDeleted($deleted)
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    /**
-     * Get deleted
-     *
-     * @return boolean 
-     */
-    public function getDeleted()
-    {
-        return $this->deleted;
     }
 }

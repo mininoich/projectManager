@@ -32,7 +32,7 @@ class Task
     /**
      * @var string
      *
-     * @ORM\Column(name="note", type="text")
+     * @ORM\Column(name="note", type="text", nullable=true)
      */
     private $note;
 
@@ -46,7 +46,7 @@ class Task
     /**
      * @var float
      *
-     * @ORM\Column(name="estimatedTime", type="float")
+     * @ORM\Column(name="estimatedTime", type="float", nullable=true)
      */
     private $estimatedTime;
 
