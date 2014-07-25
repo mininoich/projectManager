@@ -24,19 +24,12 @@ class TaskController extends Controller
     }
     
     /**
-    * @ParamConverter("workspace",     options={"mapping": {"workspace_id": "id"}})
+    * @ParamConverter("id",     options={"mapping": {"workspace_id": "id"}})
     */
-    public function todoAction(Workspace $workspace, User $user)
+    public function todoAction(Workspace $workspace)
     {
+        $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
-        
-//        $repository = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Task');
-//        $query = $repository->createQueryBuilder('t')
-//                ->where('t.workspace = :workspace')
-//                ->innerJoin('t.users', 'u', 'WITH', 'u = :user')
-//                ->setParameters(array('workspace' => $workspace, 'user' => $user))
-//                ->getQuery();
-//        $tasks = $query->getResult();
         
         $repository = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status');
         $query = $repository->createQueryBuilder('s')

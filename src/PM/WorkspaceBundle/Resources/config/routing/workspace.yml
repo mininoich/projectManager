@@ -4,7 +4,7 @@ pm_workspace_add:
    
 pm_workspace_todo:
     pattern: /{id}/todo
-    defaults: { _controller: PMWorkspaceBundle:Workspace:todo }
+    defaults: { _controller: PMWorkspaceBundle:Task:todo }
     requirements:
         id:: \d+
         

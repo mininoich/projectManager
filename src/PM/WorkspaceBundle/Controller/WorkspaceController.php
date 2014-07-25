@@ -53,10 +53,6 @@ class WorkspaceController extends Controller
         return $this->render('PMWorkspaceBundle:Workspace:form.html.twig', array('form' => $form->createView()));
     }
     
-    public function todoAction(Workspace $workspace){
-        return $this->render('PMWorkspaceBundle:Workspace:todo.html.twig', array('workspace' => $workspace));
-    }
-    
     public function showAction(Workspace $workspace){
         return $this->render('PMWorkspaceBundle:Workspace:show.html.twig', array('workspace' => $workspace));
     }
