@@ -20,13 +20,6 @@ class User extends BaseUser {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="deleted_at", type="date")
-     */
-    private $deleted_at;
 
     /**
      * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\UserRoleWorkspace", mappedBy="user", cascade={"remove", "persist"})
@@ -42,7 +35,18 @@ class User extends BaseUser {
      * @ORM\ManyToMany(targetEntity="PM\WorkspaceBundle\Entity\Task", mappedBy="users")
      */
     private $tasks;
-
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TaskStatus", mappedBy="user")
+     */
+    private $taskStatus;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="user", cascade={"remove", "persist"})
+     */
+    private $todoHiddenStatus;
+    
     /**
      * Get id
      *
@@ -50,7 +54,6 @@ class User extends BaseUser {
      */
     public function __construct() {
         parent::__construct();
-        $this->deleted_at = null;
     }
 
     /**

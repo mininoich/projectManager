@@ -60,6 +60,10 @@ class Status
      */
     private $workflowsAsNew;
     
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="status", cascade={"remove", "persist"})
+     */
+    private $todoHiddenStatus;
     
     /**
      * Get id
@@ -247,5 +251,38 @@ class Status
     public function getDefaultValue()
     {
         return $this->defaultValue;
+    }
+
+    /**
+     * Add todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     * @return Status
+     */
+    public function addTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus[] = $todoHiddenStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     */
+    public function removeTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus->removeElement($todoHiddenStatus);
+    }
+
+    /**
+     * Get todoHiddenStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTodoHiddenStatus()
+    {
+        return $this->todoHiddenStatus;
     }
 }

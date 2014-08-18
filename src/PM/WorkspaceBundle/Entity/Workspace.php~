@@ -42,7 +42,12 @@ class Workspace
     /**
      * @ORM\OneToMany(targetEntity="Workflow", mappedBy="workspace")
      */
-    private $workflow;
+    private $workflows;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="status", cascade={"remove", "persist"})
+     */
+    private $todoHiddenStatus;
     
     /**
      * Get id
@@ -159,7 +164,7 @@ class Workspace
      */
     public function addWorkflow(\PM\WorkspaceBundle\Entity\Workflow $workflow)
     {
-        $this->workflow[] = $workflow;
+        $this->workflows[] = $workflow;
 
         return $this;
     }
@@ -171,7 +176,7 @@ class Workspace
      */
     public function removeWorkflow(\PM\WorkspaceBundle\Entity\Workflow $workflow)
     {
-        $this->workflow->removeElement($workflow);
+        $this->workflows->removeElement($workflow);
     }
 
     /**
@@ -179,8 +184,8 @@ class Workspace
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getWorkflow()
+    public function getWorkflows()
     {
-        return $this->workflow;
+        return $this->workflows;
     }
 }

@@ -40,7 +40,7 @@ class Status
      *
      * @ORM\Column(name="defaultValue", type="boolean")
      */
-    private $defaultValue;
+    private $defaultValue = false;
     
     /**
      *
@@ -60,6 +60,10 @@ class Status
      */
     private $workflowsAsNew;
     
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="status", cascade={"remove", "persist"})
+     */
+    private $todoHiddenStatus;
     
     /**
      * Get id
@@ -224,5 +228,28 @@ class Status
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * Set defaultValue
+     *
+     * @param boolean $defaultValue
+     * @return Status
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultValue
+     *
+     * @return boolean 
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
     }
 }

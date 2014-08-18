@@ -9,6 +9,7 @@ use PM\WorkspaceBundle\Entity\Workspace;
 use PM\WorkspaceBundle\Form\TaskType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
         
 class TaskController extends Controller
 {
@@ -28,8 +29,14 @@ class TaskController extends Controller
     */
     public function todoAction(Workspace $workspace)
     {
+        $hiddenStatus = $todoHiddenStatus = array();
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
+        
+        $todoHiddenStatus = $this->getDoctrine()->getRepository('PMWorkspaceBundle:TodoHiddenStatus')->findBy(array('user' => $user, 'workspace' => $workspace));
+        foreach($todoHiddenStatus as $ths){
+            $hiddenStatus[$ths->getStatus()->getId()] = $ths->getStatus()->getId();
+        }
         
         $repository = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status');
         $query = $repository->createQueryBuilder('s')
@@ -41,7 +48,7 @@ class TaskController extends Controller
                 ->getQuery();
         $status = $query->getResult();
         
-        return $this->render('PMWorkspaceBundle:Task:todo.html.twig', array('workspace' => $workspace, 'status' => $status));
+        return $this->render('PMWorkspaceBundle:Task:todo.html.twig', array('workspace' => $workspace, 'status' => $status, 'hiddenStatus' => $hiddenStatus));
     }
     
     /**
@@ -128,5 +135,55 @@ class TaskController extends Controller
         }
         
         return $this->render('PMWorkspaceBundle:Task:form.html.twig', array('form' => $form->createView(), 'action' => $action, 'workspace' => $workspace));
+    }
+    
+    public function edittaskstatusAction(){
+        $request = $this->getRequest();
+        $response = new JsonResponse();
+        
+        if($request->getMethod() === "POST"){
+            $user = $this->get('security.context')->getToken()->getUser();
+            $taskid = $request->get('taskid');
+            $fromstatusid = $request->get('fromstatusid');
+            $tostatusid = $request->get('tostatusid');
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $task = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Task')->find($taskid);
+            $fromstatus = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status')->find($fromstatusid);
+            $tostatus = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status')->find($tostatusid);
+            
+            // On vérifie si on a le droit de passer de ce statut au nouveau 
+            $repo = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status');
+            $qb = $repo->createQueryBuilder('s')
+            ->innerJoin('s.workflowsAsNew', 'w', 'WITH', 'w.oldStatus = :fromstatus AND w.newStatus = :tostatus')
+            ->innerJoin('w.role', 'r')
+            ->innerJoin('r.userRoleWorkspace', 'urw')
+            ->where('urw.user = :current_user')
+            ->andWhere('w.workspace = :workspace')
+            ->setParameters(array('fromstatus' => $fromstatus, 'tostatus' => $tostatus, 'current_user' => $user, 'workspace' => $task->getWorkspace()));
+            $count = count($qb->getQuery()->getResult());
+            
+            if($count == 1){
+                // On met l'ancien status à LastStatus = false
+                $ts = $this->getDoctrine()->getRepository('PMWorkspaceBundle:TaskStatus')->findOneBy(array('task' => $task, 'lastStatus' => 1));
+                $ts->setLastStatus(false);
+                $em->persist($ts);
+
+                // Ajout du nouveau statut
+                $taskStatus = new TaskStatus();
+                $taskStatus->setStatus($tostatus);
+                $task->addTaskStatus($taskStatus);
+
+                $em->persist($task);
+                $em->flush();
+                $response->setData(array('type' => 'succes', 'message' => 'Statut mis à jour avec succès'));
+            } else {
+                $response->setData(array('type' => 'danger', 'message' => 'Vous n\'avez pas les droits nécessaires pour effectuer cette action'));
+            }
+        } else {
+            $response->setData(array('type' => 'danger', 'message' => 'Action impossible'));
+        }
+        return $response;
     }
 }

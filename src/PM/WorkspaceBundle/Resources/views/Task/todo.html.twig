@@ -1,15 +1,30 @@
 {% extends 'PMWorkspaceBundle:Workspace:layout.html.twig' %}
+
+{% block sidebar %}
+<h4>Blocs affichés</h4>
+    {% for s in status %}
+    <div class="checkbox">
+        {% set checked = '' %}
+        {% if s.id not in hiddenStatus %}
+        {% set checked = 'checked' %}
+        {% endif %}
+        <input type="checkbox" name="displayedStatus" id="{{ s.id }}" {{ checked }}><label for="{{ s.id }}">&nbsp;{{ s.name }} </lablel>
+    </div>
+    {% endfor %}
+<button type="submit" class="btn btn-default btn-xs">Actualiser</button>
+{% endblock %}
+
 {% block content %}
 {% for s in status %}
     <div class="col-md-4" >
   <div class="panel panel-primary">
   <div class="panel-heading" >{{ s.name}}</div>
-  <div style="height:250px; overflow:auto;">
+  <div class="droppable" style="height:250px; overflow:auto;" statusid="{{ s.id }}">
   <table class="table table-hover table-responsive table-condensed ">
             <thead>
                 <tr>
                     <th>Sujet</th>
-                    <th>Action</th>
+                    <th style="width:30px;">Action</th>
                 </tr>
             </thead>
             <tbody >
@@ -17,7 +32,7 @@
                 {% for ts in s.taskStatus %}
                     {% if ts.lastStatus %}
                     {% set nb = nb + 1 %}
-                    <tr>
+                    <tr class="draggable" style="z-index:100;" taskid="{{ ts.task.id }}" statusid="{{ s.id }}">
                         <td style="font-size:0.8em; line-height:1.5em;">{{ ts.task.name }}</td>
                         <td class="text-right">
                             <a href="{{ path('pm_task_edit', {'workspace_id': workspace.id, 'task_id': ts.task.id})}}"><img src=" {{ asset('img/pencil.png') }} "></a>
@@ -36,11 +51,59 @@
     </div>
 {% endfor %}
 
-<div id="widget" style="background-color:#003399; width:100px; height:100px;"></div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript">
-    $('#widget').draggable();
+        
+    //this will hold reference to the tr we have dragged and its helper
+    var c = {};
+    
+    $('TR').draggable({
+            helper: "clone",
+            start: function(event, ui) {
+                c.tr = this;
+                c.helper = ui.helper;
+            }
+    });
+    
+    $(".droppable").droppable({
+        over: function(event, ui) {
+            $(this).css({
+                background: "#ECECEC"
+            });
+        }, 
+        out: function(event, ui) {
+            $(this).css({
+                background: "#FFFFFF"
+            });
+        }, 
+        drop: function(event, ui) {
+            var $fromstatusid = $(c.tr).attr('statusid');
+            var $tostatusid = $(this).attr('statusid');
+            var $taskid = $(c.tr).attr('taskid');
+            
+            $(this).find('tbody').append(c.tr);
+            //$(c.tr).remove();
+            $(c.helper).remove();
+            $(this).css({
+                background: "#FFFFFF"
+            });
+            $(c.tr).find('td:first-child').append('<span class="text-right">...</span>');
+            $.ajax({
+                dataType: 'json', 
+                type: "POST",
+                url: '{{ path("pm_task_edit_status", {'workspace_id': workspace.id}) }}', 
+                data: {taskid: $taskid, fromstatusid: $fromstatusid, tostatusid: $tostatusid}
+            }).done(function(html){
+                if(html.type == 'danger'){
+                    // On replace la ligne à son statut de départ
+                    $("[statusid='"+$fromstatusid+"']").find('tbody').append(c.tr);
+                } 
+               console.log(html.message); 
+            });
+        }
+    });
+    </script>
 {% endblock %}
         
