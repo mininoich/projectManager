@@ -2,16 +2,14 @@
 
 {% block sidebar %}
 <h4>Blocs affichés</h4>
-    {% for s in status %}
-    <div class="checkbox">
-        {% set checked = '' %}
-        {% if s.id not in hiddenStatus %}
-        {% set checked = 'checked' %}
-        {% endif %}
-        <input type="checkbox" name="displayedStatus" id="{{ s.id }}" {{ checked }}><label for="{{ s.id }}">&nbsp;{{ s.name }} </lablel>
-    </div>
-    {% endfor %}
-<button type="submit" class="btn btn-default btn-xs">Actualiser</button>
+    <form method="POST" {{ form_enctype(form) }}>
+        {% for s in allStatus %}
+        <div class="checkbox">
+            {{ form_widget(attribute(form, 'status_' ~ s.id )) }}&nbsp;{{ form_label(attribute(form, 'status_' ~ s.id )) }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-default btn-xs">Actualiser</button>
+    {{ form_end(form) }}
 {% endblock %}
 
 {% block content %}

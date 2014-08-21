@@ -30,7 +30,7 @@ class TodoHiddenStatus
     private $user;
     
     /** 
-     *
+     * 
      * @ORM\ManyToOne(targetEntity="PM\WorkspaceBundle\Entity\Status", inversedBy="todoHiddenStatus")
      * @ORM\JoinColumn(name="status_id", referencedColumnName="id", nullable=false)
      */
@@ -79,10 +79,10 @@ class TodoHiddenStatus
     /**
      * Set status
      *
-     * @param \PM\WorkspaceBundle\Entity\Workspace $status
+     * @param \PM\WorkspaceBundle\Entity\Status $status
      * @return TodoHiddenStatus
      */
-    public function setStatus(\PM\WorkspaceBundle\Entity\Workspace $status)
+    public function setStatus(\PM\WorkspaceBundle\Entity\Status $status)
     {
         $this->status = $status;
 
@@ -92,7 +92,7 @@ class TodoHiddenStatus
     /**
      * Get status
      *
-     * @return \PM\WorkspaceBundle\Entity\Workspace 
+     * @return \PM\WorkspaceBundle\Entity\Status 
      */
     public function getStatus()
     {
