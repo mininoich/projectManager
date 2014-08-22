@@ -30,21 +30,12 @@ class TaskController extends Controller
     */
     public function todoAction(Workspace $workspace)
     {
-        $hiddenStatus = $todoHiddenStatus = array();
-        $originalTodoHiddenStatusIds = array();
+        $hiddenStatus = array();
         $user = $this->get('security.context')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         
-        
-        
         // Récupération de tous les statuts
         $allStatus = $em->createQuery("SELECT s FROM PMWorkspaceBundle:Status s WHERE s.deleted = 0")->getResult();
-        
-        // Récupération des statuts déjà persistés
-        $originalTodoHiddenStatus = $this->getDoctrine()->getRepository('PMWorkspaceBundle:TodoHiddenStatus')->findBy(array('user' => $user, 'workspace' => $workspace));
-        foreach($originalTodoHiddenStatus as $oths){
-            $originalTodoHiddenStatusIds[] = $oths->getId();
-        }
         
         // Création du formulaire 
         $form = $this->createFormBuilder();
@@ -54,13 +45,28 @@ class TaskController extends Controller
         }
         $form = $form->getForm();
         
+        // Récupération des statuts déjà persistés
+        $originalTodoHiddenStatus = $this->getDoctrine()->getRepository('PMWorkspaceBundle:TodoHiddenStatus')->findBy(array('user' => $user, 'workspace' => $workspace));
+        foreach($originalTodoHiddenStatus as $oths){
+            $hiddenStatus[$oths->getStatus()->getId()] = $oths->getStatus()->getId();
+            $form->get('status_'.$oths->getStatus()->getId())->setData(false);
+        }
+        
+        // Récupération des statuts à afficher
+        $query = $em->createQuery("SELECT s FROM PMWorkspaceBundle:Status s "
+                . " LEFT JOIN s.todoHiddenStatus ths WITH ths.user = :user AND ths.workspace = :workspace "
+                . " WHERE s.deleted = 0 "
+                . " AND ths IS NULL");
+        $query->setParameters(array('workspace' => $workspace, 'user' => $user));
+        $displayedStatus = $query->getResult();
+        
         // Vérification du formulaire
         $request = $this->getRequest();
         if($request->getMethod() === "POST"){
             $form->handleRequest($request);
             foreach($allStatus as $s){
                 if($form->get('status_' . $s->getId())->getData() == false){
-                    if(!in_array($s->getId(), $originalTodoHiddenStatusIds)){
+                    if(!in_array($s->getId(), $hiddenStatus)){
                         // On ajoute
                         $todoHiddenStatus = new TodoHiddenStatus();
                         $todoHiddenStatus->setStatus($s);
@@ -82,24 +88,19 @@ class TaskController extends Controller
             return $this->redirect($this->generateUrl('pm_workspace_todo', array('id' => $workspace->getId())));
         }
         
-        // Récupération des statuts persistés à jour
-        $todoHiddenStatus = $this->getDoctrine()->getRepository('PMWorkspaceBundle:TodoHiddenStatus')->findBy(array('user' => $user, 'workspace' => $workspace));
-        foreach($todoHiddenStatus as $ths){
-            $hiddenStatus[$ths->getStatus()->getId()] = $ths->getStatus()->getId();
-            $form->get('status_'.$ths->getStatus()->getId())->setData(false);
-        }
-        
         // Récupération des tâches pour les statuts affichés uniquement
-        $query = $em->createQuery("SELECT s FROM PMWorkspaceBundle:Status s "
-                . " LEFT JOIN s.taskStatus ts WITH ts.lastStatus = 1 "
-                . " LEFT JOIN ts.task t WITH t.workspace = :workspace "
-                . " LEFT JOIN t.users u WITH u = :user "
+        $query = $em->createQuery("SELECT t FROM PMWorkspaceBundle:Task t "
+                . " LEFT JOIN t.taskStatus ts WITH ts.lastStatus = 1 "
+                . " LEFT JOIN ts.status s "
+                . " LEFT JOIN t.users u "
                 . " WHERE s.deleted = 0 "
-                . " AND s.id NOT IN (".implode($hiddenStatus, ", ").")");
+                . " AND u = :user "
+                . " AND t.workspace = :workspace "
+                . (!empty($hiddenStatus) ? " AND s.id NOT IN (".implode($hiddenStatus, ", ").")" : ''));
         $query->setParameters(array('workspace' => $workspace, 'user' => $user));
-        $status = $query->getResult();
+        $mytasks = $query->getResult();
         
-        return $this->render('PMWorkspaceBundle:Task:todo.html.twig', array('form' => $form->createView(), 'workspace' => $workspace, 'status' => $status, 'allStatus' => $allStatus, 'hiddenStatus' => $hiddenStatus));
+        return $this->render('PMWorkspaceBundle:Task:todo.html.twig', array('form' => $form->createView(), 'displayedStatus' => $displayedStatus, 'mytasks' => $mytasks, 'workspace' => $workspace, 'allStatus' => $allStatus));
     }
     
     /**

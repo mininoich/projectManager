@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-{% for s in status %}
+{% for s in displayedStatus %}
     <div class="col-md-4" >
   <div class="panel panel-primary">
   <div class="panel-heading" >{{ s.name}}</div>
@@ -27,14 +27,14 @@
             </thead>
             <tbody >
                 {% set nb = 0 %}
-                {% for ts in s.taskStatus %}
-                    {% if ts.lastStatus %}
+                {% for t in mytasks %}
+                    {% if t.status == s %}
                     {% set nb = nb + 1 %}
-                    <tr class="draggable" style="z-index:100;" taskid="{{ ts.task.id }}" statusid="{{ s.id }}">
-                        <td style="font-size:0.8em; line-height:1.5em;">{{ ts.task.name }}</td>
+                    <tr class="draggable" style="z-index:100;" taskid="{{ t.id }}" statusid="{{ s.id }}">
+                        <td style="font-size:0.8em; line-height:1.5em;">{{ t.name }}</td>
                         <td class="text-right">
-                            <a href="{{ path('pm_task_edit', {'workspace_id': workspace.id, 'task_id': ts.task.id})}}"><img src=" {{ asset('img/pencil.png') }} "></a>
-                            <a href="{{ path('pm_task_delete', {'workspace_id': workspace.id, 'task_id': ts.task.id})}}"><img src=" {{ asset('img/delete.png') }} "></a>
+                            <a href="{{ path('pm_task_edit', {'workspace_id': workspace.id, 'task_id': t.id})}}"><img src=" {{ asset('img/pencil.png') }} "></a>
+                            <a href="{{ path('pm_task_delete', {'workspace_id': workspace.id, 'task_id': t.id})}}"><img src=" {{ asset('img/delete.png') }} "></a>
                         </td>
                     </tr> 
                     {% endif %}
