@@ -1,20 +1,15 @@
-{% extends 'PMWorkspaceBundle:Role:layout.html.twig' %}
-
-{% block title %}
-    Edition du workflow
-{% endblock %}
-
-{% block roleContent %}
+{% extends 'PMWorkspaceBundle:Workspace:layout.html.twig' %}
+{% block content %}
     
     <form method="POST" {{ form_enctype(form) }}>
-        <table class="table table-hover table-responsive">
+        <table class="table table-hover table-responsive table-bordered">
             <thead>
                 <tr>
                     <th>
                         De / Vers
                     </th>
-                    {% for s in status %}
-                        <th>{{ s.name }}</th>
+                    {% for statusTo in status %}
+                    <th class="th_workflow_to">{{ statusTo.name }}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -22,15 +17,16 @@
             <tbody>
             {% for statusFrom in status %}
                 <tr>
-                    <td>
+                    <td class="td_workflow_from">
                         <strong>{{ statusFrom.name }}</strong>
                     </td>
                 {% for statusTo in status %}
-                    <td>
-                        {% if statusFrom.id == statusTo.id %}
-                            x
-                        {% else %}
-                            {{ form_widget(attribute(form, 'status_' ~ statusFrom.id ~ '_' ~ statusTo.id)) }}
+                    <td class="td_workflow_body" title="Cocher les profils qui peuvent cliquer sur lorsque le statut est égal à '{{ statusFrom.name }}'">
+                        {% if statusFrom.id != statusTo.id %}
+                            {% for role in roles %}
+                                {{ form_widget(attribute(form, 'status_' ~ statusFrom.id ~ '_' ~ statusTo.id ~ '_' ~ role.id )) }}&nbsp;{{ form_label(attribute(form, 'status_' ~ statusFrom.id ~ '_' ~ statusTo.id ~ '_' ~ role.id )) }}
+                                <br/>
+                            {% endfor %}
                         {% endif %}
                     </td>
                 {% endfor %}

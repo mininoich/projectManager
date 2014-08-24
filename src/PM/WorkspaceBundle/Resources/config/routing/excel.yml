@@ -1,0 +1,7 @@
+pm_excel_index:
+    pattern:  /
+    defaults: { _controller: PMWorkspaceBundle:Excel:index }
+    
+pm_excel_edit:
+    pattern:  /edit
+    defaults: { _controller: PMWorkspaceBundle:Excel:edit }

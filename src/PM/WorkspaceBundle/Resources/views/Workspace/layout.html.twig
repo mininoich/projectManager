@@ -12,10 +12,10 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">To Do</a></li>
+                     <li><a href="{{ path('pm_workspace_todo', {'id': workspace.id })}}">Mes tâches</a></li>
                      <li><a href="{{ path('pm_userroleworkspace_index', {'workspace_id': workspace.id })}}">Membres</a></li>
                      <li><a href="{{ path('pm_task_index', {'workspace_id': workspace.id })}}">Tâches</a></li>
-                     <li><a href="#">GANTT</a></li>
+                     <li><a href="{{ path('pm_workflow_edit', {'id': workspace.id})}}">Workflow</a></li>
                 </ul>
             </div>
         </div>

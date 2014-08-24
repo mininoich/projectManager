@@ -27,10 +27,24 @@ class Status
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="deleted", type="boolean")
+     */
+    private $deleted;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="defaultValue", type="boolean")
+     */
+    private $defaultValue = false;
+    
     /**
      *
-     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task")
+     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="status")
      */
     private $taskStatus;
     
@@ -46,6 +60,10 @@ class Status
      */
     private $workflowsAsNew;
     
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="status", cascade={"remove", "persist"})
+     */
+    private $todoHiddenStatus;
     
     /**
      * Get id
@@ -87,6 +105,7 @@ class Status
         $this->taskStatus = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workflowsAsOld = new \Doctrine\Common\Collections\ArrayCollection();
         $this->workflowsAsNew = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->deleted = false;
     }
 
     /**
@@ -186,5 +205,84 @@ class Status
     public function getWorkflowsAsNew()
     {
         return $this->workflowsAsNew;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return Status
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean 
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set defaultValue
+     *
+     * @param boolean $defaultValue
+     * @return Status
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultValue
+     *
+     * @return boolean 
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
+    /**
+     * Add todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     * @return Status
+     */
+    public function addTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus[] = $todoHiddenStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     */
+    public function removeTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus->removeElement($todoHiddenStatus);
+    }
+
+    /**
+     * Get todoHiddenStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTodoHiddenStatus()
+    {
+        return $this->todoHiddenStatus;
     }
 }

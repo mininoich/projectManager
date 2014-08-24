@@ -8,6 +8,10 @@ pm_task_edit:
     requirements:
         task_id: \d+
         
+pm_task_edit_status:
+    pattern:  /edittaskstatus/
+    defaults: { _controller: PMWorkspaceBundle:Task:edittaskstatus }
+        
 pm_task_delete:
     pattern:  /delete/{task_id}
     defaults: { _controller: PMWorkspaceBundle:Task:delete }

@@ -40,6 +40,16 @@ class Workspace
     private $userRoleWorkspace;
     
     /**
+     * @ORM\OneToMany(targetEntity="Workflow", mappedBy="workspace")
+     */
+    private $workflows;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="status", cascade={"remove", "persist"})
+     */
+    private $todoHiddenStatus;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -144,5 +154,71 @@ class Workspace
     public function getUserRoleWorkspace()
     {
         return $this->userRoleWorkspace;
+    }
+
+    /**
+     * Add workflow
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflow
+     * @return Workspace
+     */
+    public function addWorkflow(\PM\WorkspaceBundle\Entity\Workflow $workflow)
+    {
+        $this->workflows[] = $workflow;
+
+        return $this;
+    }
+
+    /**
+     * Remove workflow
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflow
+     */
+    public function removeWorkflow(\PM\WorkspaceBundle\Entity\Workflow $workflow)
+    {
+        $this->workflows->removeElement($workflow);
+    }
+
+    /**
+     * Get workflow
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkflows()
+    {
+        return $this->workflows;
+    }
+
+    /**
+     * Add todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     * @return Workspace
+     */
+    public function addTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus[] = $todoHiddenStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     */
+    public function removeTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus->removeElement($todoHiddenStatus);
+    }
+
+    /**
+     * Get todoHiddenStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTodoHiddenStatus()
+    {
+        return $this->todoHiddenStatus;
     }
 }

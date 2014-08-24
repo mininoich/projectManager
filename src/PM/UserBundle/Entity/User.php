@@ -35,7 +35,18 @@ class User extends BaseUser {
      * @ORM\ManyToMany(targetEntity="PM\WorkspaceBundle\Entity\Task", mappedBy="users")
      */
     private $tasks;
-
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TaskStatus", mappedBy="user")
+     */
+    private $taskStatus;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="user", cascade={"remove", "persist"})
+     */
+    private $todoHiddenStatus;
+    
     /**
      * Get id
      *
@@ -184,5 +195,71 @@ class User extends BaseUser {
     
     public function setAdmin(){
         
+    }
+
+    /**
+     * Add taskStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TaskStatus $taskStatus
+     * @return User
+     */
+    public function addTaskStatus(\PM\WorkspaceBundle\Entity\TaskStatus $taskStatus)
+    {
+        $this->taskStatus[] = $taskStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove taskStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TaskStatus $taskStatus
+     */
+    public function removeTaskStatus(\PM\WorkspaceBundle\Entity\TaskStatus $taskStatus)
+    {
+        $this->taskStatus->removeElement($taskStatus);
+    }
+
+    /**
+     * Get taskStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTaskStatus()
+    {
+        return $this->taskStatus;
+    }
+
+    /**
+     * Add todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     * @return User
+     */
+    public function addTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus[] = $todoHiddenStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     */
+    public function removeTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus->removeElement($todoHiddenStatus);
+    }
+
+    /**
+     * Get todoHiddenStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTodoHiddenStatus()
+    {
+        return $this->todoHiddenStatus;
     }
 }

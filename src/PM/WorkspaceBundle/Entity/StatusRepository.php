@@ -12,4 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class StatusRepository extends EntityRepository
 {
+    public function findDefaultStatus($differentFrom = null)
+    {
+        
+        $qb = $this->createQueryBuilder('s')
+                ->where('s.defaultValue = 1');
+        if(!is_null($differentFrom)){
+            $qb = $qb->andWhere('s != :status')
+                    ->setParameter('status', $differentFrom);
+        }
+                
+        return $qb->getQuery()->getResult();
+    }
 }

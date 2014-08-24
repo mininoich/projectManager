@@ -35,7 +35,6 @@ class Role
     private $userRoleWorkspace;
     
     /**
-     *
      * @ORM\OneToMany(targetEntity="Workflow", mappedBy="role")
      */
     private $workflows;

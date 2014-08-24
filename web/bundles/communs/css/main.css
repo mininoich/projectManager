@@ -1,0 +1,19 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 13 janv. 2014, 12:06:54
+    Author     : Tony
+*/
+
+body { padding-top: 70px; }
+
+a.link-add-workspace {background-color:#E2F1DB; }
+a.link-add-workspace:hover {background-color:#D6E9D0; }
+
+/* Workflow */
+td.td_workflow_body{font-weight: normal; font-size: 0.7em; line-height:none ; color:#666666;}
+.th_workflow_to{ text-align:center; font-size:0.8em;}
+.td_workflow_from{text-align:right; font-size:0.8em;}

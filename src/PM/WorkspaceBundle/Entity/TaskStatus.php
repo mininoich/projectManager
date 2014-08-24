@@ -24,9 +24,16 @@ class TaskStatus
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date", type="date")
+     * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+     * @var \boolean
+     *
+     * @ORM\Column(name="lastStatus", type="boolean")
+     */
+    private $lastStatus;
 
     /**
      *
@@ -39,9 +46,17 @@ class TaskStatus
      * @ORM\ManyToOne(targetEntity="Status", inversedBy="taskStatus")
      */
     private $status;
+    
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="PM\UserBundle\Entity\User", inversedBy="taskStatus") 
+     * 
+     */
+    private $user;
 
     public function __construct() {
         $this->date = new \Datetime();
+        $this->lastStatus = true;
     }
     /**
      * Get id
@@ -120,5 +135,51 @@ class TaskStatus
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \PM\WorkspaceBundle\Entity\User $user
+     * @return TaskStatus
+     */
+    public function setUser(\PM\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \PM\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set lastStatus
+     *
+     * @param boolean $lastStatus
+     * @return TaskStatus
+     */
+    public function setLastStatus($lastStatus)
+    {
+        $this->lastStatus = $lastStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get lastStatus
+     *
+     * @return boolean 
+     */
+    public function getLastStatus()
+    {
+        return $this->lastStatus;
     }
 }

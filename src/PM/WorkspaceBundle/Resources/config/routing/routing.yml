@@ -1,3 +1,7 @@
+test_excel:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/excel.yml"
+    prefix:   /excel
+    
 pm_workspace_workspace:
     resource: "@PMWorkspaceBundle/Resources/config/routing/workspace.yml"
     prefix:   /workspaces
@@ -29,3 +33,4 @@ pm_workspace_task:
     prefix:   /workspaces/{workspace_id}
     requirements:
         workspace_id: \d+
+        

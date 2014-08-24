@@ -40,6 +40,16 @@ class Workspace
     private $userRoleWorkspace;
     
     /**
+     * @ORM\OneToMany(targetEntity="Workflow", mappedBy="workspace")
+     */
+    private $workflows;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="status", cascade={"remove", "persist"})
+     */
+    private $todoHiddenStatus;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -70,5 +80,112 @@ class Workspace
     public function getName()
     {
         return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userRoleWorkspace = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add tasks
+     *
+     * @param \PM\WorkspaceBundle\Entity\Task $tasks
+     * @return Workspace
+     */
+    public function addTask(\PM\WorkspaceBundle\Entity\Task $tasks)
+    {
+        $this->tasks[] = $tasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove tasks
+     *
+     * @param \PM\WorkspaceBundle\Entity\Task $tasks
+     */
+    public function removeTask(\PM\WorkspaceBundle\Entity\Task $tasks)
+    {
+        $this->tasks->removeElement($tasks);
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
+
+    /**
+     * Add userRoleWorkspace
+     *
+     * @param \PM\WorkspaceBundle\Entity\UserRoleWorkspace $userRoleWorkspace
+     * @return Workspace
+     */
+    public function addUserRoleWorkspace(\PM\WorkspaceBundle\Entity\UserRoleWorkspace $userRoleWorkspace)
+    {
+        $this->userRoleWorkspace[] = $userRoleWorkspace;
+
+        return $this;
+    }
+
+    /**
+     * Remove userRoleWorkspace
+     *
+     * @param \PM\WorkspaceBundle\Entity\UserRoleWorkspace $userRoleWorkspace
+     */
+    public function removeUserRoleWorkspace(\PM\WorkspaceBundle\Entity\UserRoleWorkspace $userRoleWorkspace)
+    {
+        $this->userRoleWorkspace->removeElement($userRoleWorkspace);
+    }
+
+    /**
+     * Get userRoleWorkspace
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserRoleWorkspace()
+    {
+        return $this->userRoleWorkspace;
+    }
+
+    /**
+     * Add workflow
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflow
+     * @return Workspace
+     */
+    public function addWorkflow(\PM\WorkspaceBundle\Entity\Workflow $workflow)
+    {
+        $this->workflows[] = $workflow;
+
+        return $this;
+    }
+
+    /**
+     * Remove workflow
+     *
+     * @param \PM\WorkspaceBundle\Entity\Workflow $workflow
+     */
+    public function removeWorkflow(\PM\WorkspaceBundle\Entity\Workflow $workflow)
+    {
+        $this->workflows->removeElement($workflow);
+    }
+
+    /**
+     * Get workflow
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getWorkflows()
+    {
+        return $this->workflows;
     }
 }

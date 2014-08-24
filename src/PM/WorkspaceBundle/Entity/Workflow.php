@@ -32,11 +32,17 @@ class Workflow
      */
     private $newStatus;
     
+    
+    
     /**
      * @ORM\ManyToOne(targetEntity="Role", inversedBy="workflows")
      */
     private $role;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="Workspace", inversedBy="workflows")
+     */
+    private $workspace;
     
     /**
      * Get id
@@ -95,6 +101,23 @@ class Workflow
     }
 
     /**
+     * Get role
+     *
+     * @return \PM\WorkspaceBundle\Entity\Role 
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->workflowsRoles = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Set role
      *
      * @param \PM\WorkspaceBundle\Entity\Role $role
@@ -108,12 +131,25 @@ class Workflow
     }
 
     /**
-     * Get role
+     * Set workspace
      *
-     * @return \PM\WorkspaceBundle\Entity\Role 
+     * @param \PM\WorkspaceBundle\Entity\Workspace $workspace
+     * @return Workflow
      */
-    public function getRole()
+    public function setWorkspace(\PM\WorkspaceBundle\Entity\Workspace $workspace = null)
     {
-        return $this->role;
+        $this->workspace = $workspace;
+
+        return $this;
+    }
+
+    /**
+     * Get workspace
+     *
+     * @return \PM\WorkspaceBundle\Entity\Workspace 
+     */
+    public function getWorkspace()
+    {
+        return $this->workspace;
     }
 }
