@@ -52,13 +52,7 @@ class TaskController extends Controller
             $form->get('status_'.$oths->getStatus()->getId())->setData(false);
         }
         
-        // Récupération des statuts à afficher
-        $query = $em->createQuery("SELECT s FROM PMWorkspaceBundle:Status s "
-                . " LEFT JOIN s.todoHiddenStatus ths WITH ths.user = :user AND ths.workspace = :workspace "
-                . " WHERE s.deleted = 0 "
-                . " AND ths IS NULL");
-        $query->setParameters(array('workspace' => $workspace, 'user' => $user));
-        $displayedStatus = $query->getResult();
+        
         
         // Vérification du formulaire
         $request = $this->getRequest();
@@ -85,8 +79,16 @@ class TaskController extends Controller
             }
             $em->flush();
             
-            return $this->redirect($this->generateUrl('pm_workspace_todo', array('id' => $workspace->getId())));
+            //return $this->redirect($this->generateUrl('pm_workspace_todo', array('id' => $workspace->getId())));
         }
+        
+        // Récupération des statuts à afficher
+        $query = $em->createQuery("SELECT s FROM PMWorkspaceBundle:Status s "
+                . " LEFT JOIN s.todoHiddenStatus ths WITH ths.user = :user AND ths.workspace = :workspace "
+                . " WHERE s.deleted = 0 "
+                . " AND ths IS NULL");
+        $query->setParameters(array('workspace' => $workspace, 'user' => $user));
+        $displayedStatus = $query->getResult();
         
         // Récupération des tâches pour les statuts affichés uniquement
         $query = $em->createQuery("SELECT t FROM PMWorkspaceBundle:Task t "
@@ -138,7 +140,8 @@ class TaskController extends Controller
     }
         
      private function form(Workspace $workspace, Task $task, $action){
-        $user = $this->get('security.context')->getToken()->getUser();
+        $securityContext = $this->container->get('security.context');
+        
         $repo = $this->getDoctrine()->getRepository('PMWorkspaceBundle:Status');
         $initialStatus = $repo->createQueryBuilder('s')
                             ->where('s.defaultValue = 1')
@@ -151,7 +154,7 @@ class TaskController extends Controller
             $status = $task->getCurrentStatus();
         }
         
-        $form = $this->createForm(new TaskType($workspace, $status, $user, $action), $task);
+        $form = $this->createForm(new TaskType($securityContext, $workspace), $task);
         
         
         $request = $this->getRequest();

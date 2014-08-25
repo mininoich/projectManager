@@ -2,35 +2,25 @@
 
 namespace PM\WorkspaceBundle\Form;
 
-use PM\UserBundle\Entity\User;
+use LogicException;
 use PM\UserBundle\Entity\UserRepository;
-use PM\WorkspaceBundle\Entity\Status;
 use PM\WorkspaceBundle\Entity\StatusRepository;
 use PM\WorkspaceBundle\Entity\Workspace;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class TaskType extends AbstractType
 {
+    private $securityContext;
     private $workspace;
-    private $status;
-    private $user;
-    private $action;
     
-    function __construct(Workspace $workspace, Status $status, User $user, $action){
-        if(!is_null($workspace)){
-            $this->workspace = $workspace;
-        }
-        if(!is_null($status)){
-            $this->status = $status;
-        }
-        if(!is_null($user)){
-            $this->user = $user;
-        }
-        if(!is_null($action)){
-            $this->action = $action;
-        }
+    function __construct(SecurityContext $securityContext, Workspace $workspace){
+         $this->securityContext = $securityContext;
+         $this->workspace = $workspace;
     }
       
      /**
@@ -39,10 +29,6 @@ class TaskType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $workspace = $this->workspace;
-        $status = $this->status;
-        $user = $this->user;
-        
         $builder
             ->add('name')
             ->add('note', 'textarea', array(
@@ -54,7 +40,27 @@ class TaskType extends AbstractType
             ->add('deadline')
             ->add('category')
             ->add('users')
-            ->add('users', 'entity', array(
+            ;
+        
+             // grab the user, do a quick sanity check that one exists
+            $user = $this->securityContext->getToken()->getUser();
+            if (!$user) {
+                throw new LogicException(
+                    'The TaskType cannot be used without an authenticated user!'
+                );
+            }
+        
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($user){
+                
+                $task = $event->getData();
+                $form = $event->getForm();
+                $workspace = $this->workspace;
+                
+                if($task && null !== $task->getId()){
+                    $status = $task->getStatus();
+                }
+                
+                $form->add('users', 'entity', array(
                 'class' => 'PMUserBundle:User',
                 'property' => 'username',
                 'required' => false,
@@ -72,26 +78,30 @@ class TaskType extends AbstractType
                       }
                     )
                 );
-        if($this->action == 'edit'){
-            $builder->add('status', 'entity', array(
-                'class' => 'PMWorkspaceBundle:Status',
-                'property' => 'name',
-                'required' => true,
-                'mapped' => true,
-                'empty_value' => $status->getName(), 
-                'query_builder' => function(StatusRepository $sr) use ($status, $user, $workspace) {
-                        
-                        return $sr->createQueryBuilder('s')
-                                ->innerJoin('s.workflowsAsNew', 'w', 'WITH', 'w.oldStatus = :status')
-                                ->innerJoin('w.role', 'r')
-                                ->innerJoin('r.userRoleWorkspace', 'urw')
-                                ->where('urw.user = :current_user')
-                                ->andWhere('w.workspace = :workspace')
-                                ->setParameters(array('status' => $status, 'current_user' => $user, 'workspace' => $workspace));
-                      }
-                    )
-                );
-        }
+                      
+                      
+                // Si la tache nest pas nouvelle
+                if($task && null !== $task->getId()){
+                    $form->add('status', 'entity', array(
+                    'class' => 'PMWorkspaceBundle:Status',
+                    'property' => 'name',
+                    'required' => true,
+                    'mapped' => true,
+                    'query_builder' => function(StatusRepository $sr) use ($status, $user, $workspace) {
+                            
+                            return $sr->createQueryBuilder('s')
+                                    ->leftJoin('s.workflowsAsNew', 'w', 'WITH', 'w.oldStatus = :status')
+                                    ->leftJoin('w.role', 'r')
+                                    ->leftJoin('r.userRoleWorkspace', 'urw')
+                                    ->where('urw.user = :current_user')
+                                    ->andWhere('w.workspace = :workspace')
+                                    ->orWhere('s = :status')
+                                    ->setParameters(array('status' => $status, 'current_user' => $user, 'workspace' => $workspace));
+                          }
+                        )
+                    );
+                }
+            });
     }
     
     /**
