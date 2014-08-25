@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new PM\UserBundle\PMUserBundle(),
             new PM\WorkspaceBundle\PMWorkspaceBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
