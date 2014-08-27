@@ -67,4 +67,25 @@
               </div>
         {{ form_end(form) }}
     </div>
+        
+        <span class="add-on"><i class="icon-calendar"></i></span>
+{% endblock %}
+        
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        //var datepicker = $.fn.datepicker.noConflict(); // return $.fn.datepicker to previously assigned value
+        //$.fn.bootstrapDP = datepicker;                 // give $().bootstrapDP the bootstrap-datepicker functionality
+        var today = new Date();
+        
+        $(".madate").datepicker({
+            format: 'dd/mm/yyyy', 
+            weekStart: 1,
+            autoclose: true,
+            todayBtn: 'linked',
+            todayHighlight: true,
+            language: 'fr',
+            startDate: today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear()
+        });
+    </script>
 {% endblock %}

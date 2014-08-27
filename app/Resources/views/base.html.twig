@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <title>PM - {% block title %}{% endblock %}</title>
-        {% stylesheets 'bundles/communs/css/bootstrap.min.css' 'bundles/communs/css/main.css' %}
+        {% stylesheets  'bundles/communs/css/bootstrap.min.css' 'bundles/communs/css/jquery-ui.min.css' 'bundles/communs/css/datepicker.css' 'bundles/communs/css/main.css'  %}
             <link rel="stylesheet" href="{{ asset_url }}" type="text/css" media="all" />
         {% endstylesheets %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
@@ -11,12 +11,12 @@
     <body>
         {% block body %}{% endblock %}
         {% block javascripts %}
-            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/jquery-1.10.2.min.js') }}"></script>
-            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/jquery-ui.js') }}"></script>
+            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/jquery-1.11.1.min.js') }}"></script>
+            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/jquery-ui.min.js') }}"></script>
             <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/jquery.ui.touch-punch.min.js') }}"></script>
-            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/main.js') }}"></script>
             <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/bootstrap.min.js') }}"></script>
-            <script type="text/javascript" language="javascript" src="{{ asset('bundles/pmuser/js/user.js') }}"></script>
+            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/bootstrap-datepicker.js') }}"></script>
+            <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/bootstrap-datepicker.fr.js') }}"></script>
         {% endblock %}
     </body>
 </html>

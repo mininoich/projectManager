@@ -172,10 +172,12 @@ class TaskController extends Controller
                 
                 
                 if($action != 'add'){
-                    // On met l'ancien status à LastStatus = false
-                    $ts = $this->getDoctrine()->getRepository('PMWorkspaceBundle:TaskStatus')->findOneBy(array('task' => $task, 'lastStatus' => 1));
-                    $ts->setLastStatus(false);
-                    $em->persist($ts);
+                    if($status->getId() != $task->getStatus()->getId()){
+                        // On met l'ancien status à LastStatus = false
+                        $ts = $this->getDoctrine()->getRepository('PMWorkspaceBundle:TaskStatus')->findOneBy(array('task' => $task, 'lastStatus' => 1));
+                        $ts->setLastStatus(false);
+                        $em->persist($ts);
+                    }
                 }
                 
                 $task->setWorkspace($workspace);

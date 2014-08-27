@@ -37,7 +37,12 @@ class TaskType extends AbstractType
             ->add('estimatedTime', 'number', array(
                 'required' => false
             ))
-            ->add('deadline')
+            ->add('deadline', 'date', array(
+                'widget' => 'single_text',
+                'input' => 'datetime',
+                'format' => 'dd/MM/yyyy',
+                'attr' => array('class' => 'madate form-control')
+            ))
             ->add('category')
             ->add('users')
             ;
