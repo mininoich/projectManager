@@ -16,7 +16,9 @@
 {% for s in displayedStatus %}
     <div class="col-md-4" >
   <div class="panel panel-primary">
-  <div class="panel-heading" >{{ s.name}}</div>
+  <div class="panel-heading" >
+    {{ s.name}} 
+  </div>
   <div class="droppable" style="height:250px; overflow:auto;" statusid="{{ s.id }}">
   <table class="table table-hover table-responsive table-condensed ">
             <thead>
@@ -39,8 +41,12 @@
                     </tr> 
                     {% endif %}
                 {% endfor %}
-                {% if nb == 0 %}
-                    <tr><td colspan="2" class="text-center">-</td></tr>
+                {% if s.defaultValue %}
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            <a href="{{ path('pm_task_add', {'workspace_id': workspace.id })}}" class="btn btn-success btn-xs">Ajouter</a>
+                        </td>
+                    </tr>
                 {% endif %}
             </tbody>
         </table>

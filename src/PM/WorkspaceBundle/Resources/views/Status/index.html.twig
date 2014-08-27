@@ -15,7 +15,7 @@
             <tbody>
                 {% for s in status %}
                     <tr>
-                        <td>{{ s.name }}</td>
+                        <td>{{ s.name }} {% if s.defaultValue %}<em>(Statut par défaut)</em>{% endif %}</td>
                         <td>
                             <a href="{{ path('pm_status_edit', {'id': s.id})}}" class="btn btn-default btn-xs">Modifier</a>
                             <a href="{{ path('pm_status_delete', {'id': s.id})}}" class="btn btn-danger btn-xs">Supprimer</a>
