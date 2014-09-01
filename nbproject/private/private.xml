@@ -4,21 +4,18 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/projectManager/app/AppKernel.php</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Entity/TodoHiddenStatus.php</file>
             <file>file:/C:/xampp/htdocs/projectManager/composer.json</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Resources/views/Workspace/layout.html.twig</file>
+            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Entity/TaskStatus.php</file>
+            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Entity/Status.php</file>
             <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Entity/Task.php</file>
+            <file>file:/C:/xampp/htdocs/projectManager/app/Resources/views/base.html.twig</file>
+            <file>file:/C:/xampp/htdocs/projectManager/web/bundles/communs/css/main.css</file>
+            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Resources/views/Task/form.html.twig</file>
+            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Resources/views/Status/index.html.twig</file>
             <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Form/TaskType.php</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Controller/WorkflowController.php</file>
+            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Resources/views/Task/index.html.twig</file>
             <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Resources/views/Task/todo.html.twig</file>
             <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Controller/TaskController.php</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Entity/StatusRepository.php</file>
-            <file>file:/C:/xampp/htdocs/projectManager/app/Resources/views/layout.html.twig</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Entity/Status.php</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Resources/views/Workspace/sidebar.html.twig</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Form/UserRoleType.php</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Resources/views/Workflow/form.html.twig</file>
-            <file>file:/C:/xampp/htdocs/projectManager/src/PM/WorkspaceBundle/Entity/UserRoleWorkspace.php</file>
         </group>
     </open-files>
 </project-private>
