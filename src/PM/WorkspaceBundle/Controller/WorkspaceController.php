@@ -56,9 +56,9 @@ class WorkspaceController extends Controller
     public function showAction(Workspace $workspace){
         $em = $this->getDoctrine()->getManager();
         $query = $em->createQuery("SELECT s, ts FROM PMWorkspaceBundle:Status s "
-                . "LEFT JOIN s.taskStatus ts WITH ts.lastStatus = 1 "
-                . "LEFT JOIN ts.task t "
-                . "LEFT JOIN t.workspace w WITH  w = :workspace ")
+                . "INNER JOIN s.taskStatus ts WITH ts.lastStatus = 1 "
+                . "INNER JOIN ts.task t "
+                . "INNER JOIN t.workspace w WITH  w = :workspace ")
                 ->setParameters(array('workspace' => $workspace));
         
         $status = $query->getResult();

@@ -28,6 +28,9 @@ class DefaultController extends Controller
             $form->bind($request);
             if($form->isValid()){
                 $user->setPlainPassword($form->getData('password'));
+                if($form->get('admin')->getData() == true){
+                    $user->addRole('ROLE_ADMIN');
+                }
                 $userManager->updateUser($user);
                 $this->get('session')->getFlashBag()->add('success', 'Utilisateur enregistré avec succès');
                 return $this->redirect($this->generateUrl('pm_user_index'));
