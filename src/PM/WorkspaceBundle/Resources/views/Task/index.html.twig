@@ -1,6 +1,8 @@
 {% extends 'PMWorkspaceBundle:Workspace:layout.html.twig' %}
 {% block content %}
+    <p>
         <a href="{{ path('pm_task_add', {'workspace_id': workspace.id })}}" class="btn btn-success">Ajouter une tâche</a>
+    </p>
     
     {% if tasks|length > 0 %}
         <table class="table table-hover table-responsive table-condensed">

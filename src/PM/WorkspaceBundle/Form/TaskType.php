@@ -34,7 +34,7 @@ class TaskType extends AbstractType
             ->add('note', 'textarea', array(
                 'required' => false
             ))
-            ->add('estimatedTime', 'number', array(
+            ->add('estimatedTime', 'integer', array(
                 'required' => false
             ))
             ->add('deadline', 'date', array(
@@ -43,9 +43,7 @@ class TaskType extends AbstractType
                 'format' => 'dd/MM/yyyy',
                 'attr' => array('class' => 'madate form-control')
             ))
-            ->add('category')
-            ->add('users')
-            ;
+            ->add('category');
         
              // grab the user, do a quick sanity check that one exists
             $user = $this->securityContext->getToken()->getUser();
@@ -70,7 +68,7 @@ class TaskType extends AbstractType
                 'property' => 'username',
                 'required' => false,
                 'multiple' => true,
-                'expanded' => true, 
+                'expanded' => false, 
                 'empty_value' => 'Choisissez...',
                 'by_reference' => true, 
                 'query_builder' => function(UserRepository $ur) use ($workspace) {

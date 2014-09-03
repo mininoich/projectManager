@@ -1,11 +1,47 @@
-<div class="list-group">
-    <a href="#" class="list-group-item active">Accueil</a>
-    {% if app.user.isadmin %}
-        <a href="{{ path('pm_user_index')}}" class="list-group-item" >Utilisateurs</a>
-        <a href="{{ path('pm_role_index')}}" class="list-group-item" >Rôles</a>
-        <a href="{{ path('pm_status_index')}}" class="list-group-item" >Statuts</a>
-        <a href="{{ path('pm_category_index')}}" class="list-group-item" >Catégories</a>
-        <a href="{{ path('pm_workspace_add')}}" class="list-group-item link-add-workspace" >+ Workspace</a>
-    {% endif %}
-    {{ render(controller('PMWorkspaceBundle:Workspace:sidebar')) }}
+<div class="col-md-3 col-lg-2 hidden-md hidden-sm hidden-xs">
+    <div class="list-group">
+        <a href="#" class="list-group-item active">Accueil</a>
+        {% if app.user.isadmin %}
+            <a href="{{ path('pm_user_index')}}" class="list-group-item" >Utilisateurs</a>
+            <a href="{{ path('pm_role_index')}}" class="list-group-item" >Rôles</a>
+            <a href="{{ path('pm_status_index')}}" class="list-group-item" >Statuts</a>
+            <a href="{{ path('pm_category_index')}}" class="list-group-item" >Catégories</a>
+            <a href="{{ path('pm_workspace_add')}}" class="list-group-item link-add-workspace" >+ Workspace</a>
+        {% endif %}
+        {{ render(controller('PMWorkspaceBundle:Workspace:sidebar')) }}
+        
+    </div>
+    
 </div>
+
+
+<nav class="navbar navbar-inverse navbar-fixed-bottom visible-md visible-sm visible-xs" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sous_menu">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            <span class="navbar-brand">Menu</span>
+        </div>
+        <div class="collapse navbar-collapse" id="sous_menu">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" class="active">Accueil</a></li>
+                {% if app.user.isadmin %}
+                    <li><a href="{{ path('pm_user_index')}}">Utilisateurs</a></li>
+                    <li><a href="{{ path('pm_role_index')}}">Rôles</a></li>
+                    <li><a href="{{ path('pm_status_index')}}">Statuts</a></li>
+                    <li><a href="{{ path('pm_category_index')}}">Catégories</a></li>
+                    <li><a href="{{ path('pm_workspace_add')}}">+ Workspace</a></li>
+                    {{ render(controller('PMWorkspaceBundle:Workspace:sidebar')) }}
+                {% endif %}
+            </ul>
+            
+        </div>
+    </div>
+</nav>
+
+
+
