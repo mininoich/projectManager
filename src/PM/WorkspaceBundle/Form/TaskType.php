@@ -4,6 +4,7 @@ namespace PM\WorkspaceBundle\Form;
 
 use LogicException;
 use PM\UserBundle\Entity\UserRepository;
+use PM\WorkspaceBundle\Entity\DirectoryRepository;
 use PM\WorkspaceBundle\Entity\StatusRepository;
 use PM\WorkspaceBundle\Entity\Workspace;
 use Symfony\Component\Form\AbstractType;
@@ -29,6 +30,7 @@ class TaskType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $workspace = $this->workspace;
         $builder
             ->add('name')
             ->add('note', 'textarea', array(
@@ -43,7 +45,18 @@ class TaskType extends AbstractType
                 'format' => 'dd/MM/yyyy',
                 'attr' => array('class' => 'madate form-control')
             ))
-            ->add('category');
+            ->add('category')
+            ->add('directory', 'entity', array(
+                'required' => false, 
+                'class' => 'PM\WorkspaceBundle\Entity\Directory',
+                'query_builder' => function(DirectoryRepository $dr) use ($workspace) {
+                        
+                        return $dr->createQueryBuilder('d')
+                            ->join('d.workspace', 'w')
+                            ->where('w = :workspace')
+                            ->setParameter('workspace', $workspace);
+                      }
+                ));
         
              // grab the user, do a quick sanity check that one exists
             $user = $this->securityContext->getToken()->getUser();
@@ -52,7 +65,8 @@ class TaskType extends AbstractType
                     'The TaskType cannot be used without an authenticated user!'
                 );
             }
-        
+            
+            
             $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($user){
                 
                 $task = $event->getData();

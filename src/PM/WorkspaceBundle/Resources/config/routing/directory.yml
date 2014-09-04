@@ -1,0 +1,25 @@
+pm_directory_add:
+    pattern:  /add
+    defaults: { _controller: PMWorkspaceBundle:Directory:add }
+    
+pm_directory_edit:
+    pattern:  /edit/{id}
+    defaults: { _controller: PMWorkspaceBundle:Directory:edit }
+    requirements:
+        id: \d+
+        
+pm_directory_delete:
+    pattern:  /delete/{id}
+    defaults: { _controller: PMWorkspaceBundle:Directory:delete }
+    requirements:
+        id: \d+
+    
+pm_directory_show:
+    pattern: /{id}
+    defaults: { _controller: PMWorkspaceBundle:Directory:show }
+    requirements:
+        id: \d+
+    
+pm_directory_index:
+    pattern:  /
+    defaults: { _controller: PMWorkspaceBundle:Directory:index }

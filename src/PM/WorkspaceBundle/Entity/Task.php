@@ -76,6 +76,11 @@ class Task
     private $category;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Directory", inversedBy="tasks")
+     */
+    private $directory;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Time", mappedBy="task", cascade={"remove"})
      * 
      */
@@ -405,5 +410,28 @@ class Task
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set directory
+     *
+     * @param \PM\WorkspaceBundle\Entity\Directory $directory
+     * @return Task
+     */
+    public function setDirectory(\PM\WorkspaceBundle\Entity\Directory $directory = null)
+    {
+        $this->directory = $directory;
+
+        return $this;
+    }
+
+    /**
+     * Get directory
+     *
+     * @return \PM\WorkspaceBundle\Entity\Directory 
+     */
+    public function getDirectory()
+    {
+        return $this->directory;
     }
 }

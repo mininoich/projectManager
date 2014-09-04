@@ -1,7 +1,8 @@
 {% extends 'PMWorkspaceBundle:Workspace:layout.html.twig' %}
 {% block content %}
     <p>
-        <a href="{{ path('pm_task_add', {'workspace_id': workspace.id })}}" class="btn btn-success">Ajouter une tâche</a>
+        <a href="{{ path('pm_task_add', {'workspace_id': workspace.id })}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Ajouter une tâche</a>
+        <a href="{{ path('pm_directory_add', {'workspace_id': workspace.id })}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-folder-open"></span> Ajouter un dossier</a>
     </p>
     
     {% if tasks|length > 0 %}
@@ -19,8 +20,8 @@
                         <td>{{ t.currentTaskStatus.status.name }}</td>
                         <td>{{ t.name }}</td>
                         <td>
-                            <a href="{{ path('pm_task_edit', {'workspace_id': workspace.id, 'task_id': t.id})}}" class="btn btn-default btn-xs">Modifier</a>
-                            <a href="{{ path('pm_task_delete', {'workspace_id': workspace.id, 'task_id': t.id})}}" class="btn btn-danger btn-xs">Supprimer</a>
+                            <a href="{{ path('pm_task_edit', {'workspace_id': workspace.id, 'task_id': t.id})}}" ><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="{{ path('pm_task_delete', {'workspace_id': workspace.id, 'task_id': t.id})}}" ><span class="glyphicon glyphicon-trash"></span></a>
                         </td>
                     </tr> 
                 {% endfor %}
@@ -29,4 +30,46 @@
     {% else %}
         <div class="alert alert-warning">Il n'y a aucune tâche.</div> 
     {% endif %}
+       
+            <div id="testA"></div>
+       
 {% endblock %}
+        
+        {% block javascripts %}
+        {{ parent() }}
+        <script type="text/javascript">
+            
+
+		
+
+		webix.ready(function(){
+                       var data = [ 
+                                    {
+                                        "id":" ",
+                                        "value":"Non classé",
+                                        "data": [
+                                                {% for t in freeTasks %}
+                                                    {
+                                                        "id":"{{t.id}}",
+                                                        "value":"{{t.name}}"
+                                                    }
+                                                {% endfor %} 
+                                                ]
+                                    }
+                                ];
+                        
+			grid = $("#testA").webix_treetable({
+                            autoheight:true,
+                            adjust:true,
+				columns:[
+					{ id:"id",	header:"", css:{"text-align":"right"}},
+					{ id:"value",	header:"Tâche",
+						template:"{common.treetable()} #value#",  fillspace:1,}
+				],
+				data: data
+			});	
+		});
+		
+		webix.event(window, "resize", function(){ grid.adjust(); })
+        </script>
+        {% endblock %}

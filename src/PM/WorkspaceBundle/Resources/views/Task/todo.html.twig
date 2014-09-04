@@ -27,7 +27,7 @@
 
 {% block content %}
 {% for s in displayedStatus %}
-    <div class="col-md-4" >
+    <div class="col-md-6" >
   <div class="panel panel-primary">
   <div class="panel-heading" >
     {{ s.name}} 
@@ -48,8 +48,8 @@
                     <tr class="draggable" style="z-index:100;" taskid="{{ t.id }}" statusid="{{ s.id }}">
                         <td style="font-size:0.8em; line-height:1.5em;">{{ t.name }}</td>
                         <td class="text-right">
-                            <a href="{{ path('pm_task_edit', {'workspace_id': workspace.id, 'task_id': t.id})}}"><img src=" {{ asset('img/pencil.png') }} "></a>
-                            <a href="{{ path('pm_task_delete', {'workspace_id': workspace.id, 'task_id': t.id})}}"><img src=" {{ asset('img/delete.png') }} "></a>
+                            <a href="{{ path('pm_task_edit', {'workspace_id': workspace.id, 'task_id': t.id})}}"><span class="glyphicon glyphicon-edit"></span></a>
+                            <a href="{{ path('pm_task_delete', {'workspace_id': workspace.id, 'task_id': t.id})}}"><span class="glyphicon glyphicon-trash"></span></a>
                         </td>
                     </tr> 
                     {% endif %}

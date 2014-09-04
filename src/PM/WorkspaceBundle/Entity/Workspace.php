@@ -45,6 +45,11 @@ class Workspace
     private $workflows;
     
     /**
+     * @ORM\OneToMany(targetEntity="Directory", mappedBy="workspace")
+     */
+    private $directories;
+    
+    /**
      * @ORM\OneToMany(targetEntity="PM\WorkspaceBundle\Entity\TodoHiddenStatus", mappedBy="status", cascade={"remove", "persist"})
      */
     private $todoHiddenStatus;
@@ -220,5 +225,38 @@ class Workspace
     public function getTodoHiddenStatus()
     {
         return $this->todoHiddenStatus;
+    }
+
+    /**
+     * Add directories
+     *
+     * @param \PM\WorkspaceBundle\Entity\Directory $directories
+     * @return Workspace
+     */
+    public function addDirectory(\PM\WorkspaceBundle\Entity\Directory $directories)
+    {
+        $this->directories[] = $directories;
+
+        return $this;
+    }
+
+    /**
+     * Remove directories
+     *
+     * @param \PM\WorkspaceBundle\Entity\Directory $directories
+     */
+    public function removeDirectory(\PM\WorkspaceBundle\Entity\Directory $directories)
+    {
+        $this->directories->removeElement($directories);
+    }
+
+    /**
+     * Get directories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDirectories()
+    {
+        return $this->directories;
     }
 }

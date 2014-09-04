@@ -22,7 +22,11 @@ class TaskController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tasks = $workspace->getTasks();
         
-        return $this->render('PMWorkspaceBundle:Task:index.html.twig', array('workspace' => $workspace, 'tasks' => $tasks));
+        // taches qui ne sont pas dans un dossier
+        $freeTasks = array();
+        $freeTasks = $em->createQuery("SELECT t FROM PMWorkspaceBundle:Task t WHERE t.directory IS NULL")->getResult();
+        
+        return $this->render('PMWorkspaceBundle:Task:index.html.twig', array('workspace' => $workspace, 'tasks' => $tasks, 'freeTasks' => $freeTasks));
     }
     
     /**

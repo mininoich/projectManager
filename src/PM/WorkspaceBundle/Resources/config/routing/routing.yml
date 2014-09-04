@@ -18,6 +18,12 @@ pm_workspace_category:
     resource: "@PMWorkspaceBundle/Resources/config/routing/category.yml"
     prefix:   /categories
     
+pm_workspace_directory:
+    resource: "@PMWorkspaceBundle/Resources/config/routing/directory.yml"
+    prefix:   /directories/{workspace_id}
+    requirements:
+        workspace_id: \d+
+    
 pm_workspace_workflow:
     resource: "@PMWorkspaceBundle/Resources/config/routing/workflow.yml"
     prefix:   /workflows

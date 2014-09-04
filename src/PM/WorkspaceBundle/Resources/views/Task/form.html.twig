@@ -23,6 +23,13 @@
                     {{ form_widget(form.note, {'attr': {'class': 'form-control', 'rows': '4'}}) }}
                 </div>
             </div>
+            <div class="row top-buffer">
+                <label for="pm_workspacebundle_task_directory" class="col-sm-2 control-label">Dossier</label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.directory) }}
+                    {{ form_widget(form.directory, {'attr': {'class': 'form-control select_directory'}}) }}
+                </div>
+            </div>
             {% if action == 'edit' %}
             <div class="row top-buffer">
                 <label for="pm_workspacebundle_task_status" class="col-sm-2 control-label">Statut</label>
@@ -87,6 +94,11 @@
         });
         
         $('.select_affectations').select2({
+            placeholder: "Choisissez",
+            allowClear: true
+        });
+        
+        $('.select_directory').select2({
             placeholder: "Choisissez",
             allowClear: true
         });

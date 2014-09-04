@@ -43,6 +43,13 @@ class Status
     private $defaultValue = false;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="closed", type="boolean")
+     */
+    private $closed = false;
+    
+    /**
      *
      * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="status")
      */
@@ -284,5 +291,28 @@ class Status
     public function getTodoHiddenStatus()
     {
         return $this->todoHiddenStatus;
+    }
+
+    /**
+     * Set closed
+     *
+     * @param boolean $closed
+     * @return Status
+     */
+    public function setClosed($closed)
+    {
+        $this->closed = $closed;
+
+        return $this;
+    }
+
+    /**
+     * Get closed
+     *
+     * @return boolean 
+     */
+    public function getClosed()
+    {
+        return $this->closed;
     }
 }

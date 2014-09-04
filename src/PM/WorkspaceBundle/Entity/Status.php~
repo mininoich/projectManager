@@ -43,6 +43,13 @@ class Status
     private $defaultValue = false;
     
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="closed", type="boolean")
+     */
+    private $closed = false;
+    
+    /**
      *
      * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="status")
      */
@@ -251,5 +258,38 @@ class Status
     public function getDefaultValue()
     {
         return $this->defaultValue;
+    }
+
+    /**
+     * Add todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     * @return Status
+     */
+    public function addTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus[] = $todoHiddenStatus;
+
+        return $this;
+    }
+
+    /**
+     * Remove todoHiddenStatus
+     *
+     * @param \PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus
+     */
+    public function removeTodoHiddenStatus(\PM\WorkspaceBundle\Entity\TodoHiddenStatus $todoHiddenStatus)
+    {
+        $this->todoHiddenStatus->removeElement($todoHiddenStatus);
+    }
+
+    /**
+     * Get todoHiddenStatus
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTodoHiddenStatus()
+    {
+        return $this->todoHiddenStatus;
     }
 }
