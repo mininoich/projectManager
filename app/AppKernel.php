@@ -21,6 +21,7 @@ class AppKernel extends Kernel
             new PM\WorkspaceBundle\PMWorkspaceBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

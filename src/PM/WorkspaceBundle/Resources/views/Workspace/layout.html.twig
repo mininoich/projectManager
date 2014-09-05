@@ -9,16 +9,16 @@
         <div class="container">
                 <ul class="nav nav-tabs">
                      <li class="{% if route == 'pm_workspace_todo' %}active{% endif %}">
-                         <a href="{{ path('pm_workspace_todo', {'id': workspace.id })}}">Mes tâches</a>
+                         <a class="blacklink" href="{{ path('pm_workspace_todo', {'id': workspace.id })}}">Mes tâches</a>
                      </li>
                      <li class="{% if route == 'pm_userroleworkspace_index' %}active{% endif %}">
-                         <a href="{{ path('pm_userroleworkspace_index', {'workspace_id': workspace.id })}}">Membres</a>
+                         <a class="blacklink" href="{{ path('pm_userroleworkspace_index', {'workspace_id': workspace.id })}}">Membres</a>
                      </li>
                      <li  class="{% if route == 'pm_task_index' %}active{% endif %}">
-                         <a href="{{ path('pm_task_index', {'workspace_id': workspace.id })}}">Tâches</a>
+                         <a class="blacklink" href="{{ path('pm_task_index', {'workspace_id': workspace.id })}}">Tâches</a>
                      </li>
                      <li class="{% if route == 'pm_workflow_edit' %}active{% endif %}">
-                         <a href="{{ path('pm_workflow_edit', {'id': workspace.id})}}">Workflow</a>
+                         <a class="blacklink" href="{{ path('pm_workflow_edit', {'id': workspace.id})}}">Workflow</a>
                      </li>
                 </ul>
             </div>

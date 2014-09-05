@@ -23,10 +23,12 @@ class TaskController extends Controller
         $tasks = $workspace->getTasks();
         
         // taches qui ne sont pas dans un dossier
-        $freeTasks = array();
-        $freeTasks = $em->createQuery("SELECT t FROM PMWorkspaceBundle:Task t WHERE t.directory IS NULL")->getResult();
+        $freeTasks = $directories = array();
+        $freeTasks = $em->createQuery("SELECT t FROM PMWorkspaceBundle:Task t WHERE t.directory IS NULL AND t.workspace = :workspace")->setParameter('workspace', $workspace)->getResult();
         
-        return $this->render('PMWorkspaceBundle:Task:index.html.twig', array('workspace' => $workspace, 'tasks' => $tasks, 'freeTasks' => $freeTasks));
+        $directories = $em->createQuery("SELECT d FROM PMWorkspaceBundle:Directory d WHERE d.workspace = :workspace AND d.parent IS NULL")->setParameter('workspace', $workspace)->getResult();
+        
+        return $this->render('PMWorkspaceBundle:Task:index.html.twig', array('workspace' => $workspace, 'tasks' => $tasks, 'freeTasks' => $freeTasks, 'directories' => $directories));
     }
     
     /**
@@ -111,18 +113,15 @@ class TaskController extends Controller
     
     /**
     * @ParamConverter("workspace",     options={"mapping": {"workspace_id": "id"}})
-    * @ParamConverter("user",     options={"mapping": {"member_id": "id"}})
+    * @ParamConverter("task",     options={"mapping": {"task_id": "id"}})
     */
-    public function deleteAction(Workspace $workspace, User $user){
+    public function deleteAction(Workspace $workspace, Task $task){
         $em = $this->getDoctrine()->getManager();
         
-        foreach($user->getUserRoleWorkspace() as $urw ){
-            if($urw->getWorkspace()->getId() === $workspace->getId()){
-                $em->remove($urw);
-            }
-        }
+        $em->remove($task);
         $em->flush();
-        $this->get('session')->getFlashBag()->add('success', $user->getUsername().' n\'est plus affecté au workspace "'.$workspace->getName().'"');
+        
+        $this->get('session')->getFlashBag()->add('success',  'Tâche supprimée avec succès');
         return $this->redirect($this->generateUrl('pm_userroleworkspace_index', array('workspace_id'=>$workspace->getId())));
     }
     

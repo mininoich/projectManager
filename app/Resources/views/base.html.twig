@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <title>PM - {% block title %}{% endblock %}</title>
             <link rel="stylesheet" href="{{ asset('bundles/communs/css/bootstrap.min.css') }}" type="text/css" media="all" />
             <link rel="stylesheet" href="{{ asset('bundles/communs/css/jquery-ui.min.css') }}" type="text/css" media="all" />
@@ -26,6 +26,8 @@
             <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/jit.js') }}"></script>
             <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/webix.js') }}"></script>
             <script type="text/javascript" language="javascript" src="{{ asset('bundles/communs/js/select2.min.js') }}"></script>
+            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+            <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         {% endblock %}
     </body>
 </html>

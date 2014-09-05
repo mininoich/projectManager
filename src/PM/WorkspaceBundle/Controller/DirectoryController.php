@@ -24,19 +24,19 @@ class DirectoryController extends Controller
     
     /**
     * @ParamConverter("workspace",     options={"mapping": {"workspace_id": "id"}})
-    * @ParamConverter("user",     options={"mapping": {"member_id": "id"}})
+    * @ParamConverter("directory",     options={"mapping": {"id": "id"}})
     */
-    public function deleteAction(Workspace $workspace, User $user){
+    public function deleteAction(Workspace $workspace, Directory $directory){
         $em = $this->getDoctrine()->getManager();
         
-        foreach($user->getUserRoleWorkspace() as $urw ){
-            if($urw->getWorkspace()->getId() === $workspace->getId()){
-                $em->remove($urw);
-            }
+        if(count($directory->getTasks()) == 0 && count($directory->getChildren()) == 0){
+            $em->remove($directory);
+            $em->flush();
+            $this->get('session')->getFlashBag()->add('success', 'Dossier supprimé avec succès ');
+        } else {
+            $this->get('session')->getFlashBag()->add('error', 'Impossible de supprimer ce dossier car il n\'est pas vide');
         }
-        $em->flush();
-        $this->get('session')->getFlashBag()->add('success', $user->getUsername().' n\'est plus affecté au workspace "'.$workspace->getName().'"');
-        return $this->redirect($this->generateUrl('pm_userroleworkspace_index', array('workspace_id'=>$workspace->getId())));
+        return $this->redirect($this->generateUrl('pm_task_index', array('workspace_id'=>$workspace->getId())));
     }
     
     

@@ -20,3 +20,6 @@ td.td_workflow_body{font-weight: normal; font-size: 0.7em; line-height:none ; co
 
 
 .top-buffer{margin-top:20px;}
+
+.blacklink{color:#666666;}
+.blacklink:hover{color: #333333;}

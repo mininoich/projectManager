@@ -60,7 +60,7 @@ class Task
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task", cascade={"persist", "remove"})
      */
     private $taskStatus;
     

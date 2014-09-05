@@ -5,71 +5,133 @@
         <a href="{{ path('pm_directory_add', {'workspace_id': workspace.id })}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-folder-open"></span> Ajouter un dossier</a>
     </p>
     
-    {% if tasks|length > 0 %}
-        <table class="table table-hover table-responsive table-condensed">
-            <thead>
-                <tr>
-                    <th>Statut</th>
-                    <th>Sujet</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for t in tasks %}
-                    <tr>
-                        <td>{{ t.currentTaskStatus.status.name }}</td>
-                        <td>{{ t.name }}</td>
-                        <td>
-                            <a href="{{ path('pm_task_edit', {'workspace_id': workspace.id, 'task_id': t.id})}}" ><span class="glyphicon glyphicon-edit"></span></a>
-                            <a href="{{ path('pm_task_delete', {'workspace_id': workspace.id, 'task_id': t.id})}}" ><span class="glyphicon glyphicon-trash"></span></a>
-                        </td>
-                    </tr> 
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
+    {% if tasks|length == 0 %}
         <div class="alert alert-warning">Il n'y a aucune tâche.</div> 
     {% endif %}
-       
-            <div id="testA"></div>
+        <p>
+            <input type="button" class="btn" value="Get as Excel" onclick="grid.exportToExcel();">
+        </p>
+        <div id="testA"></div>
        
 {% endblock %}
         
         {% block javascripts %}
         {{ parent() }}
         <script type="text/javascript">
+            {% macro directory_children(dir) %}
+                    {% for c in dir.children %}
+                        {
+                            "id": "{{ c.id }}",
+                            "type": "directory", 
+                            "value": "{{ c.name }}",
+                                "data": [
+                                            {{ _self.directory_children(c) }}
+                                        ]
+                        },
+                    {% endfor %}
+                    {% for t in dir.tasks %}
+                        {
+                            "id": "{{ t.id }}", 
+                            "type": "task", 
+                            "value": "{{ t.name }}"
+                        },
+                    {% endfor %}
+            {% endmacro %}
             
-
+            {% import _self as macros %}
 		
-
+                {% if (freeTasks|length > 0 or directories|length > 0 ) %}
 		webix.ready(function(){
+                       var dossierParDefaut = "Non classé"; 
+                        
                        var data = [ 
-                                    {
-                                        "id":" ",
-                                        "value":"Non classé",
+                                    {% if freeTasks|length > 0 %}
+                                    { 
+                                        "id" : -1, 
+                                        "type": "defaultDirectory", 
+                                        "value": dossierParDefaut,
                                         "data": [
                                                 {% for t in freeTasks %}
                                                     {
-                                                        "id":"{{t.id}}",
-                                                        "value":"{{t.name}}"
-                                                    }
+                                                        "id": "{{ t.id }}",
+                                                        "type": "task",
+                                                        "value": "{{t.name}}"
+                                                    },
                                                 {% endfor %} 
                                                 ]
-                                    }
+                                    },
+                                    {% endif %}
+                                    {% if directories|length > 0 %}
+                                        {% for d in directories %}
+                                            { 
+                                                "id": "{{ d.id }}",
+                                                "type": "directory", 
+                                                "value": "{{ d.name }}",
+                                                "data": [
+                                                            {% if d.children|length > 0 %}
+                                                                {{ macros.directory_children(d) }}
+                                                            {% endif %}    
+                                                            {% if d.tasks|length > 0 %}
+                                                                {% for t in d.tasks %}
+                                                                    {
+                                                                        "id": "{{ t.id }}", 
+                                                                        "type": "task", 
+                                                                        "value": "{{ t.name }}"
+                                                                    },
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        ]
+                                                
+                                            },
+                                        {% endfor %}
+                                    {% endif %}
                                 ];
                         
 			grid = $("#testA").webix_treetable({
                             autoheight:true,
                             adjust:true,
-				columns:[
-					{ id:"id",	header:"", css:{"text-align":"right"}},
-					{ id:"value",	header:"Tâche",
-						template:"{common.treetable()} #value#",  fillspace:1,}
-				],
-				data: data
+                            dragColumn: true,
+                            filterMode:{
+                                showSubItems:false,
+                                level:2
+                            },
+                            columns:[
+                                    {   id:"action",	
+                                        header:"", 
+                                        css: "text-align:center;", 
+                                        template: function(obj, common){
+                                            // utilisation du bundle fos_js_routing pour générer les url depuis js
+                                            // ajouter les routes dans config.yml
+                                            if(obj.type == "directory"){
+                                              if(obj.$count == 0){
+                                                  return ' <a class="blacklink" href="'+Routing.generate('pm_directory_delete', { workspace_id: {{ workspace.id}}, id: obj.id })+'"><span class="glyphicon glyphicon-trash"></span></a>';
+                                              } else {
+                                               return '';
+                                                }
+                                            } else if(obj.type == "defaultDirectory"){
+                                                return '';
+                                            }
+                                            return ' <a class="blacklink" href="'+Routing.generate('pm_task_delete', { workspace_id: {{ workspace.id}}, task_id: obj.id })+'"><span class="glyphicon glyphicon-trash"></span></a>';
+                                        },
+                                        width:40
+                                    },
+
+                                    {   id:"value",	
+                                        header:"Tâche", 
+                                        template: function(obj, common){
+                                            // utilisation du bundle fos_js_routing pour générer les url depuis js
+                                            // ajouter les routes dans config.yml
+                                            if(obj.type == "directory" || obj.type == "defaultDirectory"){return common.treetable(obj, common)+obj.value+' ('+obj.$count+')'; }
+                                            return common.treetable(obj, common)+' <a class="blacklink" href="'+Routing.generate('pm_task_edit', { workspace_id: {{ workspace.id}}, task_id: obj.id })+'">'+obj.value+'</a>';
+                                        },  
+                                        fillspace:1}
+
+                            ],
+                            data: data
 			});	
 		});
 		
 		webix.event(window, "resize", function(){ grid.adjust(); })
+                {% endif %}
         </script>
         {% endblock %}
