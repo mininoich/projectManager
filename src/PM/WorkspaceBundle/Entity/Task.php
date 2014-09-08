@@ -92,6 +92,22 @@ class Task
     private $users;
     
     /**
+     *
+     * @var type 
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="parent")
+     */
+    private $children;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Task", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
+    
+    public function __toString(){
+        return $this->name;
+    }
+    /**
      * @ORM\prePersist()
      */
     public function prePersist(){
@@ -433,5 +449,61 @@ class Task
     public function getDirectory()
     {
         return $this->directory;
+    }
+
+    /**
+     * Add children
+     *
+     * @param \PM\WorkspaceBundle\Entity\Task $children
+     * @return Task
+     */
+    public function addChild(\PM\WorkspaceBundle\Entity\Task $children)
+    {
+        $this->children[] = $children;
+
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param \PM\WorkspaceBundle\Entity\Task $children
+     */
+    public function removeChild(\PM\WorkspaceBundle\Entity\Task $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \PM\WorkspaceBundle\Entity\Task $parent
+     * @return Task
+     */
+    public function setParent(\PM\WorkspaceBundle\Entity\Task $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \PM\WorkspaceBundle\Entity\Task 
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }

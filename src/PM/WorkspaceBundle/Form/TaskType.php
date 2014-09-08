@@ -6,6 +6,7 @@ use LogicException;
 use PM\UserBundle\Entity\UserRepository;
 use PM\WorkspaceBundle\Entity\DirectoryRepository;
 use PM\WorkspaceBundle\Entity\StatusRepository;
+use PM\WorkspaceBundle\Entity\TaskRepository;
 use PM\WorkspaceBundle\Entity\Workspace;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -96,6 +97,26 @@ class TaskType extends AbstractType
                     )
                 );
                       
+               $form->add('parent', 'entity', array(
+                'required' => false, 
+                'class' => 'PM\WorkspaceBundle\Entity\Task',
+                'query_builder' => function(TaskRepository $tr) use ($task, $workspace) {
+                        
+                   // Si la tache nest pas nouvelle
+                    if($task && null !== $task->getId()){
+                        return $tr->createQueryBuilder('t')
+                            ->join('t.workspace', 'w')
+                            ->where('w = :workspace')
+                            ->andWhere('t != :task')
+                            ->setParameters(array('workspace'=> $workspace, 'task' => $task));
+                    } else {
+                        return $tr->createQueryBuilder('t')
+                            ->join('t.workspace', 'w')
+                            ->where('w = :workspace')
+                            ->setParameters(array('workspace'=> $workspace));
+                    }
+                }
+                ));
                       
                 // Si la tache nest pas nouvelle
                 if($task && null !== $task->getId()){

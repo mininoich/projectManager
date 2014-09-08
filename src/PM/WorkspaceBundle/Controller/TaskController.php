@@ -246,4 +246,13 @@ class TaskController extends Controller
         }
         return $response;
     }
+    
+    /**
+    * @ParamConverter("workspace",     options={"mapping": {"workspace_id": "id"}})
+    */
+    public function calendarAction(Workspace $workspace){
+        $em = $this->getDoctrine()->getManager();
+        $tasksWithDeadline = $em->createQuery("SELECT t FROM PMWorkspaceBundle:Task t WHERE t.deadline IS NOT NULL AND t.workspace = :workspace")->setParameter("workspace", $workspace)->getResult();
+        return $this->render('PMWorkspaceBundle:Task:calendar.html.twig', array('workspace' => $workspace, 'tasks' => $tasksWithDeadline));
+    }
 }

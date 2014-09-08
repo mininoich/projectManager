@@ -1,7 +1,11 @@
 {% extends 'PMWorkspaceBundle:Workspace:layout.html.twig' %}
 
 {% block title %}
-    Ajouter une Tâche
+    {% if action == 'edit' %} 
+        Modifier la tâche
+    {% else %}
+        Ajouter une Tâche 
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -28,6 +32,13 @@
                 <div class="col-sm-10">
                     {{ form_errors(form.directory) }}
                     {{ form_widget(form.directory, {'attr': {'class': 'form-control select_directory'}}) }}
+                </div>
+            </div>
+            <div class="row top-buffer">
+                <label for="pm_workspacebundle_task_parent" class="col-sm-2 control-label">Liée à (tâche parent)</label>
+                <div class="col-sm-10">
+                    {{ form_errors(form.parent) }}
+                    {{ form_widget(form.parent, {'attr': {'class': 'form-control select_parent'}}) }}
                 </div>
             </div>
             {% if action == 'edit' %}
@@ -93,14 +104,10 @@
             startDate: today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear()
         });
         
-        $('.select_affectations').select2({
+        $('.select_affectations, .select_directory, .select_parent').select2({
             placeholder: "Choisissez",
             allowClear: true
         });
         
-        $('.select_directory').select2({
-            placeholder: "Choisissez",
-            allowClear: true
-        });
     </script>
 {% endblock %}

@@ -24,6 +24,11 @@ pm_task_show:
     requirements:
         task_id: \d+
     
+pm_task_calendar:
+    pattern: /calendar
+    defaults: { _controller: PMWorkspaceBundle:Task:calendar }
+    
 pm_task_index:
     pattern:  /tasks
     defaults: { _controller: PMWorkspaceBundle:Task:index }
+    

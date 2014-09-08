@@ -1,0 +1,60 @@
+{% extends 'PMWorkspaceBundle:Workspace:layout.html.twig' %}
+{% block content %}
+    
+        <div id="calendar"></div>
+       
+{% endblock %}
+        
+        {% block javascripts %}
+        {{ parent() }}
+        <script type="text/javascript">
+            var events =    [
+                                {% for t in tasks %}
+                                {
+                                    id: '{{ t.id }}',
+                                    title: '{{ t.name }}',
+                                    start: '{{ t.deadline|date("Y-m-d") }}',
+                                    end: '{{ t.deadline|date("Y-m-d") }}',
+                                    status: '{{ t.status.name }}',
+                                    affectations: '{{ t.users|join(', ') }}'
+                                },
+                                {% endfor %}
+                            ];
+            $('#calendar').fullCalendar({
+                eventSources:   [
+                                    {
+                                        events: events,
+                                        color: 'orange'
+                                    }
+                                ],
+                lang: 'fr',
+                eventClick: function(event){
+                    if($("[view_id=popup_task_"+event.id+"]").length == 0){
+                        webix.ready(function(){
+                            webix.ui({
+                            id: "popup_task_"+event.id,
+                            view:"window",
+                            position: "center",
+                            minHeight:350, 
+                            move: true,
+                            head: {
+                                        view:"toolbar", 
+                                        cols:[
+                                            {view: "label", label: "Tâche"},
+                                            {view: "button", label: "Fermer", width:70, align: "right", click:("$$('popup_task_"+event.id+"').close();")}
+                                            ]
+                                },
+                            body: {
+                                    template: 
+                                        '<div><p>Statut : '+event.status+'</p>'
+                                        + '<p><strong>'+event.title+'</strong></p>'
+                                        + '<p>Affectation(s) : '+event.affectations+'</p></div>'
+                                    },
+                            autoHeight:true
+                            }).show();
+                         });
+                    }
+                }
+            });
+        </script>
+        {% endblock %}

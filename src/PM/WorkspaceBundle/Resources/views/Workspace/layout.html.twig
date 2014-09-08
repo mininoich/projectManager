@@ -8,6 +8,9 @@
     {% set route = app.request.attributes.get('_route') %}
         <div class="container">
                 <ul class="nav nav-tabs">
+                     <li class="{% if route == 'pm_task_calendar' %}active{% endif %}">
+                         <a class="blacklink" href="{{ path('pm_task_calendar', {'workspace_id': workspace.id })}}">Calendrier</a>
+                     </li>
                      <li class="{% if route == 'pm_workspace_todo' %}active{% endif %}">
                          <a class="blacklink" href="{{ path('pm_workspace_todo', {'id': workspace.id })}}">Mes tâches</a>
                      </li>

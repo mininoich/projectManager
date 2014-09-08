@@ -3,14 +3,15 @@
     <p>
         <a href="{{ path('pm_task_add', {'workspace_id': workspace.id })}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-plus"></span> Ajouter une tâche</a>
         <a href="{{ path('pm_directory_add', {'workspace_id': workspace.id })}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-folder-open"></span> Ajouter un dossier</a>
+        {% if tasks|length > 0 %}
+            <button class="btn btn-default btn-sm" onclick="grid.exportToExcel();"><span class="glyphicon glyphicon-open"></span> Excel</button>
+        {% endif %}
     </p>
     
     {% if tasks|length == 0 %}
         <div class="alert alert-warning">Il n'y a aucune tâche.</div> 
     {% endif %}
-        <p>
-            <input type="button" class="btn" value="Get as Excel" onclick="grid.exportToExcel();">
-        </p>
+
         <div id="testA"></div>
        
 {% endblock %}
@@ -33,10 +34,27 @@
                         {
                             "id": "{{ t.id }}", 
                             "type": "task", 
-                            "value": "{{ t.name }}"
+                            "value": "{{ t.name }}", 
+                            "data": [
+                                        {{ _self.task_children(t) }}
+                                    ]
                         },
                     {% endfor %}
             {% endmacro %}
+                
+            {% macro task_children(task) %}
+                {% for t in task.children %}
+                        {
+                            "id": "{{ t.id }}",
+                            "type": "task", 
+                            "value": "{{ t.name }}",
+                                "data": [
+                                            {{ _self.task_children(t) }}
+                                        ]
+                        },
+                    {% endfor %}
+            {% endmacro %}
+                
             
             {% import _self as macros %}
 		
@@ -55,7 +73,10 @@
                                                     {
                                                         "id": "{{ t.id }}",
                                                         "type": "task",
-                                                        "value": "{{t.name}}"
+                                                        "value": "{{t.name}}",
+                                                        "data": [
+                                                                    {{ macros.task_children(t) }}
+                                                                ]
                                                     },
                                                 {% endfor %} 
                                                 ]
@@ -76,7 +97,10 @@
                                                                     {
                                                                         "id": "{{ t.id }}", 
                                                                         "type": "task", 
-                                                                        "value": "{{ t.name }}"
+                                                                        "value": "{{ t.name }}", 
+                                                                        "data": [
+                                                                                    {{ macros.task_children(t) }}
+                                                                                ]
                                                                     },
                                                                 {% endfor %}
                                                             {% endif %}
@@ -109,6 +133,8 @@
                                                return '';
                                                 }
                                             } else if(obj.type == "defaultDirectory"){
+                                                return '';
+                                            } else if (obj.$count > 0){
                                                 return '';
                                             }
                                             return ' <a class="blacklink" href="'+Routing.generate('pm_task_delete', { workspace_id: {{ workspace.id}}, task_id: obj.id })+'"><span class="glyphicon glyphicon-trash"></span></a>';

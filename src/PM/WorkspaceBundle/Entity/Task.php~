@@ -60,7 +60,7 @@ class Task
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="TaskStatus", mappedBy="task", cascade={"persist", "remove"})
      */
     private $taskStatus;
     
@@ -90,6 +90,19 @@ class Task
      * @ORM\ManyToMany(targetEntity="PM\UserBundle\Entity\User", inversedBy="tasks")
      */
     private $users;
+    
+    /**
+     *
+     * @var type 
+     * @ORM\OneToMany(targetEntity="Task", mappedBy="parent")
+     */
+    private $children;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Task", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    private $parent;
     
     /**
      * @ORM\prePersist()
@@ -410,5 +423,28 @@ class Task
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set directory
+     *
+     * @param \PM\WorkspaceBundle\Entity\Directory $directory
+     * @return Task
+     */
+    public function setDirectory(\PM\WorkspaceBundle\Entity\Directory $directory = null)
+    {
+        $this->directory = $directory;
+
+        return $this;
+    }
+
+    /**
+     * Get directory
+     *
+     * @return \PM\WorkspaceBundle\Entity\Directory 
+     */
+    public function getDirectory()
+    {
+        return $this->directory;
     }
 }
